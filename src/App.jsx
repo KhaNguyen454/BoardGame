@@ -5,7 +5,6 @@ import { GameBoard } from './components/GameBoard';
 import { Sidebar } from './components/Sidebar';
 import { ActionPanel } from './components/ActionPanel';
 import { BossModal } from './components/BossModal';
-import { TradeModal } from './components/TradeModal';
 import { ToastAlert } from './components/ToastAlert';
 
 const BoardWrapper = (props) => {
@@ -28,7 +27,6 @@ const BoardWrapper = (props) => {
 
       {/* Modals */}
       <BossModal {...props} />
-      <TradeModal {...props} />
     </div>
   );
 };

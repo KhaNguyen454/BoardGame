@@ -4,6 +4,8 @@ import { produceResources } from './moves/produce';
 import { resolveEvent } from './moves/marketEvent';
 import { contributeTokens } from './moves/bossBattle';
 import { upgradeRing, buySocialPoints, trade, endTurn, executeTrade, skipTrade } from './moves/actions';
+import { confirmRoll } from './moves/rollDice';
+import { confirmEvent } from './moves/marketEvent';
 
 export const DuongDenThiTruong = {
   name: 'duong-den-thi-truong',
@@ -25,6 +27,8 @@ export const DuongDenThiTruong = {
       skipActionStage: {},
       upgradeBan: { '0': 0, '1': 0, '2': 0, '3': 0 },
       pendingTradeEvent: null,
+      lastRoll: null,
+      lastEvent: null,
       
       activeBoss: null,
       bossContributions: {},
@@ -37,13 +41,13 @@ export const DuongDenThiTruong = {
 
     stages: {
       rollDice: {
-        moves: { roll }
+        moves: { roll, confirmRoll }
       },
       produce: {
         moves: { produceResources }
       },
       marketEvent: {
-        moves: { resolveEvent }
+        moves: { resolveEvent, confirmEvent }
       },
       interactiveTrade: {
         moves: { executeTrade, skipTrade }

@@ -101,7 +101,14 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
   // Flow Control sau thẻ Sự kiện
   if (requiresInteractiveStage) {
     events.setStage('interactiveTrade');
-  } else if (G.skipActionStage[ctx.currentPlayer]) {
+  } else {
+    G.lastEvent = drawnCard;
+  }
+};
+
+export const confirmEvent = ({ G, ctx, events }) => {
+  G.lastEvent = null;
+  if (G.skipActionStage[ctx.currentPlayer]) {
     G.skipActionStage[ctx.currentPlayer] = false;
     events.endTurn();
   } else {
