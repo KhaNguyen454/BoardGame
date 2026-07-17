@@ -48,6 +48,21 @@ const BoardWrapper = ({ G, ctx, moves, events, playerID, isActive }) => {
   // ==========================================
   const [bossContrib, setBossContrib] = useState({ policy: 0, capital: 0, labor: 0, tech: 0 });
 
+  // ==========================================
+  // STATE CHO INTERACTIVE TRADE MODAL
+  // ==========================================
+  const isInteractiveTrade = ctx.activePlayers && ctx.activePlayers[ctx.currentPlayer] === 'interactiveTrade';
+  const isMyTurnForTrade = isInteractiveTrade && ctx.currentPlayer === myPlayerId;
+  const tradeEvent = G.pendingTradeEvent;
+  const [tradeState, setTradeState] = useState({ partnerId: '', price: 1, selectedToken1: 'none', selectedToken2: 'none', rewardToken: 'tech' });
+
+  useEffect(() => {
+    if (isInteractiveTrade) {
+      const defaultPartner = Object.keys(G.players).find(id => id !== ctx.currentPlayer) || '0';
+      setTradeState({ partnerId: defaultPartner, price: 1, selectedToken1: 'none', selectedToken2: 'none', rewardToken: 'tech' });
+    }
+  }, [isInteractiveTrade, ctx.currentPlayer, G.players]);
+
   return (
     <div className="flex h-full w-full bg-gray-50 font-sans text-slate-800">
       
@@ -140,6 +155,8 @@ const BoardWrapper = ({ G, ctx, moves, events, playerID, isActive }) => {
                  <div className="text-2xl font-bold text-gray-400">Đang chờ đến lượt của bạn...</div>
               ) : isBossBattle ? (
                  <div className="text-2xl font-bold text-purple-600 animate-pulse">⚔️ Trùm cuối đang tấn công! Hãy xem Modal.</div>
+              ) : isInteractiveTrade ? (
+                 <div className="text-2xl font-bold text-blue-600 animate-pulse">🤝 Đang thực hiện Giao dịch (Xem Modal)</div>
               ) : (
                  <>
                    {currentStage === 'rollDice' && (
@@ -181,7 +198,7 @@ const BoardWrapper = ({ G, ctx, moves, events, playerID, isActive }) => {
                        <button onClick={() => moves.buySocialPoints()} className="px-5 py-3 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-xl shadow-md transition hover:-translate-y-1">
                          ❤️ Mua Điểm Xã hội
                        </button>
-                       <button onClick={() => alert('Chức năng Giao dịch cần UI Popup riêng, sẽ cập nhật sau!')} className="px-5 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl shadow-md transition hover:-translate-y-1">
+                       <button onClick={() => alert('Giao dịch chưa có UI chi tiết')} className="px-5 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl shadow-md transition hover:-translate-y-1">
                          🤝 Giao dịch
                        </button>
                        <button onClick={() => moves.endTurn()} className="px-5 py-3 bg-gray-800 hover:bg-black text-white font-bold rounded-xl shadow-md transition hover:-translate-y-1">
@@ -259,6 +276,123 @@ const BoardWrapper = ({ G, ctx, moves, events, playerID, isActive }) => {
                 )}
               </div>
            </div>
+        </div>
+      )}
+
+      {/* 4. INTERACTIVE TRADE MODAL */}
+      {isInteractiveTrade && (
+        <div className="fixed inset-0 z-[110] bg-slate-900 bg-opacity-80 flex items-center justify-center backdrop-blur-md">
+          <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden transform transition-all">
+             {tradeEvent === 'trade_sell_tokens' ? (
+               <>
+                 <div className="bg-gradient-to-r from-blue-700 to-blue-500 p-6 text-center text-white">
+                   <h2 className="text-3xl font-black uppercase shadow-sm">🤝 Kêu Gọi Vốn Đầu Tư</h2>
+                 </div>
+                 <div className="p-8">
+                   <p className="text-gray-600 mb-6 font-semibold bg-blue-50 p-4 rounded-xl border border-blue-100">
+                     Chọn tối đa 2 Token để bán cho 1 người chơi khác để đổi lấy Điểm Tư bản.
+                   </p>
+                   <div className="flex flex-col gap-5">
+                     <div>
+                       <label className="block text-sm font-bold text-gray-700 mb-2">Đối tác (Người mua):</label>
+                       <select disabled={!isMyTurnForTrade} value={tradeState.partnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="w-full border-2 border-gray-200 rounded-xl p-3 bg-gray-50 focus:border-blue-500 outline-none font-semibold text-gray-800">
+                          {Object.keys(G.players).filter(id => id !== ctx.currentPlayer).map(id => (
+                            <option key={id} value={id}>P{parseInt(id)+1}: {G.players[id].faction}</option>
+                          ))}
+                       </select>
+                     </div>
+                     <div className="flex gap-4">
+                       <div className="flex-1">
+                         <label className="block text-sm font-bold text-gray-700 mb-2">Token 1 bán:</label>
+                         <select disabled={!isMyTurnForTrade} value={tradeState.selectedToken1} onChange={e => setTradeState({...tradeState, selectedToken1: e.target.value})} className="w-full border-2 border-gray-200 rounded-xl p-3 bg-gray-50 focus:border-blue-500 outline-none font-semibold">
+                           <option value="none">Không bán</option>
+                           <option value="capital">Vốn 💰</option>
+                           <option value="labor">Lao động 👷</option>
+                           <option value="tech">Công nghệ 💻</option>
+                           <option value="policy">Chính sách 📜</option>
+                         </select>
+                       </div>
+                       <div className="flex-1">
+                         <label className="block text-sm font-bold text-gray-700 mb-2">Token 2 bán:</label>
+                         <select disabled={!isMyTurnForTrade} value={tradeState.selectedToken2} onChange={e => setTradeState({...tradeState, selectedToken2: e.target.value})} className="w-full border-2 border-gray-200 rounded-xl p-3 bg-gray-50 focus:border-blue-500 outline-none font-semibold">
+                           <option value="none">Không bán</option>
+                           <option value="capital">Vốn 💰</option>
+                           <option value="labor">Lao động 👷</option>
+                           <option value="tech">Công nghệ 💻</option>
+                           <option value="policy">Chính sách 📜</option>
+                         </select>
+                       </div>
+                     </div>
+                     <div>
+                       <label className="block text-sm font-bold text-gray-700 mb-2">Giá bán (Điểm Tư bản nhận về):</label>
+                       <input disabled={!isMyTurnForTrade} type="number" min="0" value={tradeState.price} onChange={e => setTradeState({...tradeState, price: parseInt(e.target.value) || 0})} className="w-full border-2 border-gray-200 rounded-xl p-3 bg-white focus:border-blue-500 outline-none font-black text-xl text-blue-700 text-center" />
+                     </div>
+                   </div>
+                   {isMyTurnForTrade ? (
+                     <div className="mt-8 flex gap-4">
+                       <button onClick={() => moves.skipTrade()} className="w-1/3 py-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-xl transition">Bỏ qua</button>
+                       <button onClick={() => {
+                          const tokens = {};
+                          if(tradeState.selectedToken1 !== 'none') tokens[tradeState.selectedToken1] = (tokens[tradeState.selectedToken1] || 0) + 1;
+                          if(tradeState.selectedToken2 !== 'none') tokens[tradeState.selectedToken2] = (tokens[tradeState.selectedToken2] || 0) + 1;
+                          moves.executeTrade({ partnerId: tradeState.partnerId, tokens, price: tradeState.price });
+                       }} className="w-2/3 py-4 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition uppercase tracking-wider">Xác nhận Bán</button>
+                     </div>
+                   ) : (
+                     <div className="mt-8 p-5 bg-yellow-100 text-yellow-800 font-bold rounded-xl text-center shadow-inner">
+                       Đang chờ Người chơi {parseInt(ctx.currentPlayer)+1} thao tác...
+                     </div>
+                   )}
+                 </div>
+               </>
+             ) : tradeEvent === 'trade_buy_service' ? (
+               <>
+                 <div className="bg-gradient-to-r from-teal-700 to-teal-500 p-6 text-center text-white">
+                   <h2 className="text-3xl font-black uppercase shadow-sm">🏢 Hợp Đồng Cung Ứng B2B</h2>
+                 </div>
+                 <div className="p-8">
+                   <p className="text-gray-700 mb-6 font-semibold bg-teal-50 p-5 rounded-xl border border-teal-100 shadow-inner">
+                     Bạn sẽ chuyển <span className="font-black text-red-600 text-lg">2 Điểm Tư bản</span> cho đối tác. Hãy chọn loại Token muốn nhận từ Ngân hàng.
+                   </p>
+                   <div className="flex flex-col gap-6">
+                     <div>
+                       <label className="block text-sm font-bold text-gray-700 mb-2">Đối tác sẽ nhận 2 Điểm Tư bản:</label>
+                       <select disabled={!isMyTurnForTrade} value={tradeState.partnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="w-full border-2 border-gray-200 rounded-xl p-3 bg-gray-50 focus:border-teal-500 outline-none font-semibold text-gray-800">
+                          {Object.keys(G.players).filter(id => id !== ctx.currentPlayer).map(id => (
+                            <option key={id} value={id}>P{parseInt(id)+1}: {G.players[id].faction}</option>
+                          ))}
+                       </select>
+                     </div>
+                     <div>
+                       <label className="block text-sm font-bold text-gray-700 mb-3">Loại Token muốn nhận (Nhận 2):</label>
+                       <div className="flex gap-4">
+                          <label className={`flex-1 border-2 p-5 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-3 ${tradeState.rewardToken === 'tech' ? 'bg-teal-50 border-teal-500 shadow-md transform scale-105' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
+                            <input disabled={!isMyTurnForTrade} type="radio" name="reward" checked={tradeState.rewardToken === 'tech'} onChange={() => setTradeState({...tradeState, rewardToken: 'tech'})} className="hidden" />
+                            <span className="text-3xl">💻</span> <span className="font-bold text-lg text-gray-700">2 Công nghệ</span>
+                          </label>
+                          <label className={`flex-1 border-2 p-5 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-3 ${tradeState.rewardToken === 'policy' ? 'bg-teal-50 border-teal-500 shadow-md transform scale-105' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
+                            <input disabled={!isMyTurnForTrade} type="radio" name="reward" checked={tradeState.rewardToken === 'policy'} onChange={() => setTradeState({...tradeState, rewardToken: 'policy'})} className="hidden" />
+                            <span className="text-3xl">📜</span> <span className="font-bold text-lg text-gray-700">2 Chính sách</span>
+                          </label>
+                       </div>
+                     </div>
+                   </div>
+                   {isMyTurnForTrade ? (
+                     <div className="mt-8 flex gap-4">
+                       <button onClick={() => moves.skipTrade()} className="w-1/3 py-4 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold rounded-xl transition">Bỏ qua</button>
+                       <button onClick={() => {
+                          moves.executeTrade({ partnerId: tradeState.partnerId, rewardToken: tradeState.rewardToken });
+                       }} className="w-2/3 py-4 bg-teal-600 hover:bg-teal-700 text-white font-black rounded-xl shadow-lg transition uppercase tracking-wider">Ký Hợp Đồng</button>
+                     </div>
+                   ) : (
+                     <div className="mt-8 p-5 bg-yellow-100 text-yellow-800 font-bold rounded-xl text-center shadow-inner">
+                       Đang chờ Người chơi {parseInt(ctx.currentPlayer)+1} thao tác...
+                     </div>
+                   )}
+                 </div>
+               </>
+             ) : null}
+          </div>
         </div>
       )}
     </div>
