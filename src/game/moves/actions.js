@@ -47,7 +47,7 @@ export const endTurn = ({ events }) => {
   events.endTurn();
 };
 
-export const executeTrade = ({ G, ctx, events }, payload) => {
+export const executeTrade = ({ G, ctx, events, random }, payload) => {
   const p1 = G.players[ctx.currentPlayer];
   const p2 = G.players[payload.partnerId];
 
@@ -75,6 +75,17 @@ export const executeTrade = ({ G, ctx, events }, payload) => {
     
     if (payload.rewardToken === 'tech') p1.resources.tech += 2;
     else if (payload.rewardToken === 'policy') p1.resources.policy += 2;
+  }
+
+  // Thưởng Xã Hội khi giao dịch thành công
+  p1.socialPoints += 1;
+  p2.socialPoints += 1;
+
+  // Đặc quyền HTX
+  if (p1.faction === 'Kinh tế Tập thể / HTX' || p2.faction === 'Kinh tế Tập thể / HTX') {
+    const rTypes = ['policy', 'capital', 'labor', 'tech'];
+    p1.resources[rTypes[Math.floor(random.Number() * 4)]]++;
+    p2.resources[rTypes[Math.floor(random.Number() * 4)]]++;
   }
 
   G.pendingTradeEvent = null;

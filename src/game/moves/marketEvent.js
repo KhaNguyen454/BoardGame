@@ -50,7 +50,7 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
       break;
     case 'global_reward_capital_ring23':
       for (let i = 0; i < 4; i++) {
-        if (G.players[i].ring >= 2) G.players[i].resources.capital += drawnCard.amount;
+        if (G.players[i].ring >= 2) G.players[i].capitalPoints += drawnCard.amount;
       }
       break;
     case 'reward_highest_social':
@@ -60,14 +60,25 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
         if (G.players[i].socialPoints > maxSoc) { maxSoc = G.players[i].socialPoints; winners = [i]; }
         else if (G.players[i].socialPoints === maxSoc) winners.push(i);
       }
-      if (winners.includes(parseInt(ctx.currentPlayer))) {
-        p.capitalPoints += 1;
-        p.resources.policy += 1; 
+      for (let wId of winners) {
+        let winner = G.players[wId];
+        winner.capitalPoints += 1;
+        
+        let minRes = 'policy';
+        let minVal = winner.resources.policy;
+        const resOrder = ['policy', 'tech', 'labor', 'capital'];
+        for (let r of resOrder) {
+          if (winner.resources[r] < minVal) {
+            minVal = winner.resources[r];
+            minRes = r;
+          }
+        }
+        winner.resources[minRes] += 1;
       }
       break;
     case 'reward_tech_and_conditional_capital':
       p.resources.tech += 1;
-      if (p.resources.labor >= 2) p.resources.capital += 2;
+      if (p.resources.labor >= 2) p.capitalPoints += 2;
       break;
       
     // --- Rủi ro ---

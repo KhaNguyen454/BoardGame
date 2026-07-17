@@ -27,7 +27,8 @@ export const produceResources = ({ G, ctx, events, random }, option = 1) => {
           G.skipActionStage[ctx.currentPlayer] = true;
           break;
         case 'minus_social':
-          p.socialPoints = Math.max(0, p.socialPoints - card.amount);
+          if (p.socialPoints === 0) p.capitalPoints -= 3;
+          else p.socialPoints = Math.max(0, p.socialPoints - card.amount);
           break;
         case 'minus_capital':
           p.capitalPoints -= card.amount; // Cờ Phá Sản Chạm Đáy sẽ tự trigger ở onMove
@@ -37,7 +38,7 @@ export const produceResources = ({ G, ctx, events, random }, option = 1) => {
           break;
         case 'minus_labor_and_capital':
           p.resources.labor = Math.max(0, p.resources.labor - card.laborAmount);
-          p.resources.capital = Math.max(0, p.resources.capital - card.capitalAmount);
+          p.capitalPoints -= card.capitalAmount;
           break;
         case 'minus_policy_or_ban_upgrade':
           if (p.resources.policy >= card.amount) {
