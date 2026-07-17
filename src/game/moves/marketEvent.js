@@ -1,5 +1,6 @@
 import { EVENT_DECK } from '../constants/events';
 import { BOSS_DECK } from '../constants/bosses';
+import { CLASS_STRUGGLE_DECK } from '../constants/classStruggle';
 
 export const resolveEvent = ({ G, ctx, events, random }) => {
   const p = G.players[ctx.currentPlayer];
@@ -17,7 +18,12 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
     );
   }
   
-  // Random thẻ từ bộ bài hỗn hợp (Event + Boss)
+  // Cơ chế Thẻ Phạt: Nếu người chơi vừa Sản xuất Bóc lột
+  if (G.isExploiting) {
+    currentDeck = currentDeck.concat(CLASS_STRUGGLE_DECK);
+  }
+  
+  // Random thẻ từ bộ bài hỗn hợp (Event + Boss + Struggle)
   const randomIndex = Math.floor(random.Number() * currentDeck.length);
   const drawnCard = currentDeck[randomIndex];
   
@@ -35,13 +41,15 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
     return;
   }
   
-  // ======== NẾU LÀ SỰ KIỆN THÔNG THƯỜNG ========
+  // ======== NẾU LÀ SỰ KIỆN / THẺ PHẠT THÔNG THƯỜNG ========
   let requiresInteractiveStage = false;
 
-  switch(drawnCard.type) {
+  const eventIdentifier = drawnCard.effect || drawnCard.type;
+
+  switch(eventIdentifier) {
     // --- Cơ hội ---
     case 'global_reward_ring1':
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < ctx.numPlayers; i++) {
         if (G.players[i].ring === 1) G.players[i].resources.capital += drawnCard.amount;
       }
       break;
@@ -49,14 +57,14 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
       p.resources.tech += p.faction === 'Khối FDI' ? drawnCard.fdiBonus : drawnCard.amount;
       break;
     case 'global_reward_capital_ring23':
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < ctx.numPlayers; i++) {
         if (G.players[i].ring >= 2) G.players[i].capitalPoints += drawnCard.amount;
       }
       break;
     case 'reward_highest_social':
       let maxSoc = -1;
       let winners = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < ctx.numPlayers; i++) {
         if (G.players[i].socialPoints > maxSoc) { maxSoc = G.players[i].socialPoints; winners = [i]; }
         else if (G.players[i].socialPoints === maxSoc) winners.push(i);
       }
@@ -83,21 +91,21 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
       
     // --- Rủi ro ---
     case 'global_penalty_capital':
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < ctx.numPlayers; i++) {
         if (G.players[i].resources.capital >= 1) G.players[i].resources.capital -= 1;
         else G.players[i].capitalPoints -= 2; 
       }
       break;
     case 'penalty_discard_tokens':
-      p.resources.tech = Math.max(0, p.resources.tech - 1);
-      p.resources.labor = Math.max(0, p.resources.labor - 1);
+      p.resources.tech -= 1;
+      p.resources.labor -= 1;
       break;
     case 'penalty_policy_or_social':
       if (p.resources.policy >= 1) p.resources.policy -= 1;
-      else p.socialPoints = Math.max(0, p.socialPoints - 2);
+      else p.socialPoints -= 2;
       break;
     case 'penalty_social_and_capital':
-      p.socialPoints = Math.max(0, p.socialPoints - 1);
+      p.socialPoints -= 1;
       p.capitalPoints -= 2;
       break;
       
@@ -106,6 +114,39 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
     case 'trade_buy_service':
       G.pendingTradeEvent = drawnCard.type;
       requiresInteractiveStage = true;
+      break;
+
+    // --- Thẻ Phạt (Đấu Tranh) ---
+    case 'lose_turn':
+      G.skipActionStage[ctx.currentPlayer] = true;
+      break;
+    case 'minus_social':
+      if (p.socialPoints === 0) p.capitalPoints -= 3;
+      else p.socialPoints = Math.max(0, p.socialPoints - drawnCard.amount);
+      break;
+    case 'minus_capital':
+      p.capitalPoints -= drawnCard.amount;
+      break;
+    case 'minus_labor':
+      p.resources.labor = Math.max(0, p.resources.labor - drawnCard.amount);
+      break;
+    case 'minus_labor_and_capital':
+      p.resources.labor = Math.max(0, p.resources.labor - drawnCard.laborAmount);
+      p.capitalPoints -= drawnCard.capitalAmount;
+      break;
+    case 'minus_policy_or_ban_upgrade':
+      if (p.resources.policy >= drawnCard.amount) {
+        p.resources.policy -= drawnCard.amount;
+      } else {
+        G.upgradeBan[ctx.currentPlayer] += 2;
+      }
+      break;
+    case 'minus_policy_or_lose_turn':
+      if (p.resources.policy >= drawnCard.amount) {
+        p.resources.policy -= drawnCard.amount;
+      } else {
+        G.skipActionStage[ctx.currentPlayer] = true;
+      }
       break;
   }
   
@@ -119,6 +160,7 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
 
 export const confirmEvent = ({ G, ctx, events }) => {
   G.lastEvent = null;
+  G.isExploiting = false;
   if (G.skipActionStage[ctx.currentPlayer]) {
     G.skipActionStage[ctx.currentPlayer] = false;
     events.endTurn();

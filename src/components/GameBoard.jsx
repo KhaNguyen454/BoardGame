@@ -9,9 +9,9 @@ const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
 };
 
 const RINGS = [
-  { level: 3, r: 350, id: 'ring3', fill: "url(#grad3)", stroke: "#c084fc", text: "VÒNG 3: TOÀN CẦU (Rủi ro cực cao - Lợi nhuận khổng lồ)" },
-  { level: 2, r: 240, id: 'ring2', fill: "url(#grad2)", stroke: "#60a5fa", text: "VÒNG 2: ASEAN (Cạnh tranh trung bình)" },
-  { level: 1, r: 130, id: 'ring1', fill: "url(#grad1)", stroke: "#4ade80", text: "VÒNG 1: NỘI ĐỊA (An toàn - Lợi nhuận thấp)" }
+  { level: 3, r: 350, id: 'ring3', fill: "url(#grad3)", stroke: "#c084fc", text: "VÒNG 3: TOÀN CẦU", subtext: "Rủi ro cực cao - Lợi nhuận khổng lồ" },
+  { level: 2, r: 240, id: 'ring2', fill: "url(#grad2)", stroke: "#60a5fa", text: "VÒNG 2: ASEAN", subtext: "Cạnh tranh trung bình" },
+  { level: 1, r: 130, id: 'ring1', fill: "url(#grad1)", stroke: "#4ade80", text: "VÒNG 1: NỘI ĐỊA", subtext: "An toàn - Lợi nhuận thấp" }
 ];
 
 const FACTION_COLORS = {
@@ -21,12 +21,12 @@ const FACTION_COLORS = {
   'Kinh tế Tập thể / HTX': '#10b981'
 };
 
-export const GameBoard = ({ G }) => {
+export const GameBoard = ({ G, ctx }) => {
   const center = 400;
 
   return (
-    <div className="w-full max-w-[850px] aspect-square rounded-full shadow-[0_0_80px_rgba(0,0,0,0.8)] border-8 border-slate-800 bg-slate-950 relative overflow-hidden ring-4 ring-slate-900/50">
-      <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
+    <div className="w-full h-full max-h-[85vh] aspect-square mx-auto rounded-full shadow-[0_0_80px_rgba(0,0,0,0.8)] border-8 border-slate-800 bg-slate-950 relative flex items-center justify-center overflow-hidden ring-4 ring-slate-900/50">
+      <svg viewBox="0 0 800 800" width="100%" height="100%" className="drop-shadow-2xl">
         <defs>
           <radialGradient id="grad3" cx="50%" cy="50%" r="50%">
             <stop offset="70%" stopColor="#2e1065" stopOpacity="0.8"/>
@@ -41,13 +41,25 @@ export const GameBoard = ({ G }) => {
             <stop offset="100%" stopColor="#15803d" stopOpacity="1"/>
           </radialGradient>
           
-          {RINGS.map(ring => (
-             <path 
-               key={`path-${ring.id}`} 
-               id={`text-path-${ring.id}`} 
-               d={`M ${center}, ${center} m 0, -${ring.r - 20} a ${ring.r - 20},${ring.r - 20} 0 1,1 0,${(ring.r - 20)*2} a ${ring.r - 20},${ring.r - 20} 0 1,1 0,-${(ring.r - 20)*2}`}
-             />
-          ))}
+          {RINGS.map(ring => {
+             const R = ring.r - 25; // lùi vào 25px để text nằm trọn trong vòng
+             return (
+               <g key={`paths-${ring.id}`}>
+                 {/* Upper Arc: Left to Right over the Top */}
+                 <path 
+                   id={`upper-arc-${ring.id}`} 
+                   d={`M ${center - R}, ${center} A ${R},${R} 0 0,1 ${center + R},${center}`}
+                   fill="none"
+                 />
+                 {/* Lower Arc: Left to Right over the Bottom */}
+                 <path 
+                   id={`lower-arc-${ring.id}`} 
+                   d={`M ${center - R}, ${center} A ${R},${R} 0 0,0 ${center + R},${center}`}
+                   fill="none"
+                 />
+               </g>
+             );
+          })}
         </defs>
 
         {/* Vẽ MAP (3 Vòng) */}
@@ -65,9 +77,17 @@ export const GameBoard = ({ G }) => {
             {/* Vòng sáng phát quang viền */}
             <circle cx={center} cy={center} r={ring.r} fill="none" stroke={ring.stroke} strokeWidth="6" opacity="0.3" filter="blur(4px)" />
             
+            {/* Chữ nửa trên (Text chính) */}
             <text className="text-base font-black uppercase tracking-[0.2em] fill-white opacity-60" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,1))' }}>
-              <textPath href={`#text-path-${ring.id}`} startOffset="50%" textAnchor="middle">
+              <textPath href={`#upper-arc-${ring.id}`} startOffset="50%" textAnchor="middle">
                 {ring.text}
+              </textPath>
+            </text>
+
+            {/* Chữ nửa dưới (Subtext, không bị ngược) */}
+            <text className="text-xs font-bold uppercase tracking-[0.1em] fill-white opacity-40" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,1))' }}>
+              <textPath href={`#lower-arc-${ring.id}`} startOffset="50%" textAnchor="middle">
+                {ring.subtext}
               </textPath>
             </text>
           </g>
@@ -102,6 +122,14 @@ export const GameBoard = ({ G }) => {
               
               {/* Bề mặt quân cờ */}
               <circle cx={coords.x} cy={coords.y - 2} r="24" fill={color} stroke="#fff" strokeWidth="2" className="drop-shadow-lg"/>
+              
+              {/* Hiệu ứng Active Player (Glow) */}
+              {ctx && ctx.currentPlayer === playerId && (
+                <>
+                  <circle cx={coords.x} cy={coords.y - 2} r="32" fill="none" stroke="#fbbf24" strokeWidth="4" className="animate-pulse" filter="blur(2px)"/>
+                  <circle cx={coords.x} cy={coords.y - 2} r="28" fill="none" stroke="#fcd34d" strokeWidth="2" className="animate-pulse"/>
+                </>
+              )}
               
               {/* Hiệu ứng kính bóng (Highlight) */}
               <ellipse cx={coords.x} cy={coords.y - 12} rx="12" ry="6" fill="rgba(255,255,255,0.4)" filter="blur(1px)"/>
