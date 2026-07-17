@@ -56,6 +56,10 @@ export const produceResources = ({ G, ctx, events, random }, option = 1) => {
       }
     } else return INVALID_MOVE;
   } 
+  // --- OPTION 3: BỎ QUA ---
+  else if (option === 3) {
+    // Không làm gì, chỉ skip qua bước tiếp theo
+  }
   else return INVALID_MOVE;
   
   // Flow Control

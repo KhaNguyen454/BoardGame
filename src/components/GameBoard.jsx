@@ -1,130 +1,118 @@
 import React from 'react';
 
-// Hàm tiện ích: Chuyển đổi tọa độ cực (polar) sang tọa độ Đề-các (Cartesian)
-// Giúp tính toán vị trí x, y trên vòng tròn với tâm, bán kính và góc cho trước.
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-  // Trừ 90 độ để góc 0 độ bắt đầu từ đỉnh hướng 12h (chính giữa phía trên)
+const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
   const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
   return {
     x: centerX + (radius * Math.cos(angleInRadians)),
     y: centerY + (radius * Math.sin(angleInRadians))
   };
-}
+};
+
+const RINGS = [
+  { level: 3, r: 350, id: 'ring3', fill: "url(#grad3)", stroke: "#c084fc", text: "VÒNG 3: TOÀN CẦU (Rủi ro cực cao - Lợi nhuận khổng lồ)" },
+  { level: 2, r: 240, id: 'ring2', fill: "url(#grad2)", stroke: "#60a5fa", text: "VÒNG 2: ASEAN (Cạnh tranh trung bình)" },
+  { level: 1, r: 130, id: 'ring1', fill: "url(#grad1)", stroke: "#4ade80", text: "VÒNG 1: NỘI ĐỊA (An toàn - Lợi nhuận thấp)" }
+];
+
+const FACTION_COLORS = {
+  'Doanh nghiệp Nhà nước': '#ef4444',
+  'Kinh tế Tư nhân': '#3b82f6',
+  'Khối FDI': '#f97316',
+  'Kinh tế Tập thể / HTX': '#10b981'
+};
 
 export const GameBoard = ({ G }) => {
-  // Khai báo tọa độ tâm bàn cờ
   const center = 400;
-  
-  // Cấu hình 3 Vòng Thị Trường (Vẽ từ lớn đến nhỏ để các layer không đè lên nhau)
-  const rings = [
-    { level: 3, r: 390, fill: '#E9D5FF', stroke: '#9333EA', name: 'Vòng 3 (Quốc tế)' },   // Tím nhạt
-    { level: 2, r: 270, fill: '#BFDBFE', stroke: '#2563EB', name: 'Vòng 2 (Khu vực)' },   // Xanh dương nhạt
-    { level: 1, r: 150, fill: '#BBF7D0', stroke: '#16A34A', name: 'Vòng 1 (Nội địa)' },   // Xanh lá nhạt
-  ];
-  
-  // Màu sắc phân biệt 4 phe (Đỏ, Vàng, Xanh dương, Xanh lá)
-  const factionColors = {
-    '0': '#EF4444', // Doanh nghiệp Nhà nước (Đỏ)
-    '1': '#EAB308', // Kinh tế Tư nhân (Vàng)
-    '2': '#3B82F6', // Khối FDI (Xanh dương)
-    '3': '#22C55E', // Kinh tế Tập thể / HTX (Xanh lá)
-  };
-
-  // Góc chênh lệch để 4 quân cờ không đè lên nhau nếu đứng cùng 1 vòng (0, 90, 180, 270)
-  const baseAngles = { '0': 0, '1': 90, '2': 180, '3': 270 };
-  
-  // Hàm tính toán quỹ đạo đứng của quân cờ sao cho nó nằm ngay giữa dải băng của vòng
-  const getRadiusForRing = (ringLevel) => {
-    if (ringLevel === 1) return 90;   // Tâm ở 0, viền Vòng 1 ở 150 -> Quỹ đạo đẹp là 90
-    if (ringLevel === 2) return 210;  // Viền V1 ở 150, viền V2 ở 270 -> Quỹ đạo đẹp là 210
-    if (ringLevel === 3) return 330;  // Viền V2 ở 270, viền V3 ở 390 -> Quỹ đạo đẹp là 330
-    return 90; // Fallback an toàn
-  };
 
   return (
-    <div className="w-full max-w-3xl mx-auto p-4 bg-white rounded-2xl shadow-xl border border-gray-200">
-      <svg 
-        viewBox="0 0 800 800" 
-        className="w-full h-full drop-shadow-md"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Lớp nền mờ bên ngoài vòng 3 */}
-        <rect width="100%" height="100%" fill="#F9FAFB" rx="40" />
+    <div className="w-full max-w-[850px] aspect-square rounded-full shadow-[0_0_80px_rgba(0,0,0,0.8)] border-8 border-slate-800 bg-slate-950 relative overflow-hidden ring-4 ring-slate-900/50">
+      <svg viewBox="0 0 800 800" className="w-full h-full drop-shadow-2xl">
+        <defs>
+          <radialGradient id="grad3" cx="50%" cy="50%" r="50%">
+            <stop offset="70%" stopColor="#2e1065" stopOpacity="0.8"/>
+            <stop offset="100%" stopColor="#4c1d95" stopOpacity="1"/>
+          </radialGradient>
+          <radialGradient id="grad2" cx="50%" cy="50%" r="50%">
+            <stop offset="60%" stopColor="#1e3a8a" stopOpacity="0.9"/>
+            <stop offset="100%" stopColor="#1d4ed8" stopOpacity="1"/>
+          </radialGradient>
+          <radialGradient id="grad1" cx="50%" cy="50%" r="50%">
+            <stop offset="40%" stopColor="#14532d" stopOpacity="0.9"/>
+            <stop offset="100%" stopColor="#15803d" stopOpacity="1"/>
+          </radialGradient>
+          
+          {RINGS.map(ring => (
+             <path 
+               key={`path-${ring.id}`} 
+               id={`text-path-${ring.id}`} 
+               d={`M ${center}, ${center} m 0, -${ring.r - 20} a ${ring.r - 20},${ring.r - 20} 0 1,1 0,${(ring.r - 20)*2} a ${ring.r - 20},${ring.r - 20} 0 1,1 0,-${(ring.r - 20)*2}`}
+             />
+          ))}
+        </defs>
 
-        {/* 1. VẼ 3 VÒNG ĐỒNG TÂM */}
-        {rings.map((ring) => (
-          <g key={`ring-${ring.level}`}>
+        {/* Vẽ MAP (3 Vòng) */}
+        {RINGS.map((ring) => (
+          <g key={ring.level}>
             <circle 
               cx={center} 
               cy={center} 
               r={ring.r} 
-              fill={ring.fill} 
-              stroke={ring.stroke} 
-              strokeWidth="6"
+              fill={ring.fill}
+              stroke={ring.stroke}
+              strokeWidth="3"
+              className="drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-1000"
             />
-            {/* Tên của vòng thị trường được vẽ sát viền phía trên */}
-            <text 
-              x={center} 
-              y={center - ring.r + 35} 
-              textAnchor="middle" 
-              fill={ring.stroke} 
-              className="text-xl font-bold uppercase tracking-widest drop-shadow-sm"
-              style={{ fontFamily: 'sans-serif' }}
-            >
-              {ring.name}
+            {/* Vòng sáng phát quang viền */}
+            <circle cx={center} cy={center} r={ring.r} fill="none" stroke={ring.stroke} strokeWidth="6" opacity="0.3" filter="blur(4px)" />
+            
+            <text className="text-base font-black uppercase tracking-[0.2em] fill-white opacity-60" style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,1))' }}>
+              <textPath href={`#text-path-${ring.id}`} startOffset="50%" textAnchor="middle">
+                {ring.text}
+              </textPath>
             </text>
           </g>
         ))}
 
-        {/* 2. VẼ TÂM BÀN CỜ (START POINT) */}
-        <circle cx={center} cy={center} r="45" fill="#1F2937" stroke="#F3F4F6" strokeWidth="4" />
-        <text 
-          x={center} 
-          y={center + 6} 
-          textAnchor="middle" 
-          fill="#FFF" 
-          className="text-lg font-black tracking-widest"
-          style={{ fontFamily: 'sans-serif' }}
-        >
+        {/* START POINT */}
+        <circle cx={center} cy={center} r="50" fill="#020617" stroke="#fbbf24" strokeWidth="6" className="shadow-[inset_0_0_20px_rgba(0,0,0,1)]" />
+        <circle cx={center} cy={center} r="50" fill="none" stroke="#fbbf24" strokeWidth="10" opacity="0.3" filter="blur(5px)" />
+        <text x={center} y={center + 6} textAnchor="middle" fill="#fbbf24" className="text-xl font-black tracking-widest drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]" style={{ fontFamily: 'sans-serif' }}>
           START
         </text>
 
-        {/* 3. VẼ QUÂN CỜ ĐẠI DIỆN 4 PHE */}
+        {/* QUÂN CỜ ĐẠI DIỆN 3D */}
         {G && G.players && Object.keys(G.players).map(playerId => {
           const player = G.players[playerId];
-          
-          // Lấy level vòng hiện tại từ state (biến tên là 'ring' theo Game.js)
           const ringLevel = player.ring || 1; 
           
-          // Tính toán tọa độ hiển thị
-          const orbitRadius = getRadiusForRing(ringLevel);
-          const angle = baseAngles[playerId];
-          const position = polarToCartesian(center, center, orbitRadius, angle);
+          const ringConfig = RINGS.find(r => r.level === ringLevel) || RINGS[2];
           
+          const baseAngle = parseInt(playerId) * 90;
+          const coords = polarToCartesian(center, center, ringConfig.r - 60, baseAngle + 45); 
+          const color = FACTION_COLORS[player.faction] || '#fff';
+
           return (
-            // Animation chuyển động mượt mà khi đổi vòng
-            <g 
-              key={`player-${playerId}`} 
-              className="transition-all duration-700 ease-in-out" 
-              transform={`translate(${position.x}, ${position.y})`}
-            >
-              {/* Bóng đổ giả 3D dưới đáy quân cờ */}
-              <circle r="24" fill="#000000" opacity="0.25" cy="5" />
+            <g key={playerId} className="transition-all duration-1000 ease-in-out">
+              {/* Bóng quân cờ (Shadow) */}
+              <ellipse cx={coords.x + 10} cy={coords.y + 20} rx="18" ry="8" fill="rgba(0,0,0,0.8)" filter="blur(4px)"/>
               
-              {/* Thân quân cờ */}
-              <circle 
-                r="22" 
-                fill={factionColors[playerId]} 
-                stroke="#FFFFFF" 
-                strokeWidth="4" 
-              />
+              {/* Đế quân cờ 3D */}
+              <circle cx={coords.x} cy={coords.y + 8} r="24" fill="#1f2937" stroke="#0f172a" strokeWidth="2"/>
+              <path d={`M ${coords.x - 24} ${coords.y + 8} A 24 24 0 0 0 ${coords.x + 24} ${coords.y + 8} L ${coords.x + 24} ${coords.y - 2} A 24 24 0 0 1 ${coords.x - 24} ${coords.y - 2} Z`} fill="#334155" />
               
-              {/* Số hiệu Người chơi */}
+              {/* Bề mặt quân cờ */}
+              <circle cx={coords.x} cy={coords.y - 2} r="24" fill={color} stroke="#fff" strokeWidth="2" className="drop-shadow-lg"/>
+              
+              {/* Hiệu ứng kính bóng (Highlight) */}
+              <ellipse cx={coords.x} cy={coords.y - 12} rx="12" ry="6" fill="rgba(255,255,255,0.4)" filter="blur(1px)"/>
+              
+              {/* Chữ */}
               <text 
+                x={coords.x} 
+                y={coords.y + 3} 
                 textAnchor="middle" 
-                y="6" 
-                fill="#FFFFFF" 
-                className="text-base font-bold pointer-events-none"
+                fill="#fff"
+                className="text-lg font-black drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]"
                 style={{ fontFamily: 'sans-serif' }}
               >
                 P{parseInt(playerId) + 1}
