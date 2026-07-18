@@ -95,69 +95,247 @@ export const MainMenu = ({ onStart }) => {
         return (
           <div className="flex flex-col gap-4 text-slate-200 overflow-y-auto max-h-[70vh] pr-2 custom-scrollbar">
             <h2 className="text-3xl font-black text-amber-400 uppercase tracking-widest text-center mb-6 sticky top-0 bg-slate-900/80 backdrop-blur-md py-4 z-10 rounded-t-2xl border-b border-amber-900/30 drop-shadow-md">Bộ Bài Trong Game</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <button onClick={() => { playClick(); setSelectedDeck('REWARD'); }} className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-emerald-500/50 hover:bg-emerald-900/20 hover:border-emerald-400 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.15)] flex flex-col items-center text-center group cursor-pointer hover:-translate-y-1">
-                <h3 className="text-xl font-black text-emerald-400 mb-3 uppercase tracking-wider group-hover:scale-110 transition-transform drop-shadow-sm">🌟 Cơ Hội</h3>
-                <p className="text-sm text-slate-300">Thưởng tài nguyên, buff lợi thế, hỗ trợ nâng cấp miễn phí.</p>
-                <span className="mt-4 text-[10px] font-bold text-emerald-300 bg-emerald-900/50 px-3 py-1.5 rounded-full border border-emerald-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <button onClick={() => { playClick(); setSelectedDeck('REWARD'); }} className="bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-emerald-500/50 hover:bg-emerald-900/20 hover:border-emerald-400 transition-all shadow-[0_5px_15px_rgba(16,185,129,0.15)] flex gap-4 items-center text-left group cursor-pointer hover:-translate-y-1">
+                <div className="relative shrink-0 w-[80px] h-[110px] bg-gradient-to-br from-emerald-800/90 to-emerald-950/90 rounded-lg shadow-lg border border-emerald-500/50 flex flex-col items-center justify-between p-1.5 overflow-hidden group-hover:scale-105 transition-transform">
+                  <div className="absolute inset-1 border border-white/10 rounded pointer-events-none"></div>
+                  <div className="w-8 h-0.5 bg-white/20 rounded-full mt-0.5"></div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-md opacity-90">📈</span>
+                  </div>
+                  <div className="w-full bg-black/40 rounded px-1 py-1 text-center border-t border-white/10 mt-1">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300 leading-tight mb-0.5">CƠ HỘI</p>
+                    <p className="text-[5px] text-slate-400 font-bold uppercase tracking-wider">Đầu Tư</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-emerald-400 mb-1 uppercase tracking-wider drop-shadow-sm">Cơ Hội Đầu Tư</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">Thưởng tài nguyên, buff lợi thế, hỗ trợ nâng cấp miễn phí.</p>
+                  <span className="mt-2 inline-block text-[9px] font-bold text-emerald-300 bg-emerald-900/50 px-2 py-1 rounded border border-emerald-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+                </div>
               </button>
-              <button onClick={() => { playClick(); setSelectedDeck('PENALTY'); }} className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-rose-500/50 hover:bg-rose-900/20 hover:border-rose-400 transition-all shadow-[0_5px_15px_rgba(225,29,72,0.15)] flex flex-col items-center text-center group cursor-pointer hover:-translate-y-1">
-                <h3 className="text-xl font-black text-rose-400 mb-3 uppercase tracking-wider group-hover:scale-110 transition-transform drop-shadow-sm">⚠️ Rủi Ro</h3>
-                <p className="text-sm text-slate-300">Phạt tài nguyên, trừ điểm Tư bản/Xã hội (thuộc bộ Hội nhập).</p>
-                <span className="mt-4 text-[10px] font-bold text-rose-300 bg-rose-900/50 px-3 py-1.5 rounded-full border border-rose-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+
+              <button onClick={() => { playClick(); setSelectedDeck('PENALTY'); }} className="bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-rose-500/50 hover:bg-rose-900/20 hover:border-rose-400 transition-all shadow-[0_5px_15px_rgba(225,29,72,0.15)] flex gap-4 items-center text-left group cursor-pointer hover:-translate-y-1">
+                <div className="relative shrink-0 w-[80px] h-[110px] bg-gradient-to-br from-rose-800/90 to-rose-950/90 rounded-lg shadow-lg border border-rose-500/50 flex flex-col items-center justify-between p-1.5 overflow-hidden group-hover:scale-105 transition-transform">
+                  <div className="absolute inset-1 border border-white/10 rounded pointer-events-none"></div>
+                  <div className="w-8 h-0.5 bg-white/20 rounded-full mt-0.5"></div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-md opacity-90">📉</span>
+                  </div>
+                  <div className="w-full bg-black/40 rounded px-1 py-1 text-center border-t border-white/10 mt-1">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-rose-300 leading-tight mb-0.5">RỦI RO</p>
+                    <p className="text-[5px] text-slate-400 font-bold uppercase tracking-wider">Thị Trường</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-rose-400 mb-1 uppercase tracking-wider drop-shadow-sm">Rủi Ro Thị Trường</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">Phạt tài nguyên, trừ điểm Tư bản/Xã hội do biến động kinh tế.</p>
+                  <span className="mt-2 inline-block text-[9px] font-bold text-rose-300 bg-rose-900/50 px-2 py-1 rounded border border-rose-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+                </div>
               </button>
-              <button onClick={() => { playClick(); setSelectedDeck('TRADE'); }} className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-blue-500/50 hover:bg-blue-900/20 hover:border-blue-400 transition-all shadow-[0_5px_15px_rgba(59,130,246,0.15)] flex flex-col items-center text-center group cursor-pointer hover:-translate-y-1">
-                <h3 className="text-xl font-black text-blue-400 mb-3 uppercase tracking-wider group-hover:scale-110 transition-transform drop-shadow-sm">🤝 Tương Tác</h3>
-                <p className="text-sm text-slate-300">Các lá bài bắt buộc giao dịch hoặc cướp đoạt giữa các người chơi.</p>
-                <span className="mt-4 text-[10px] font-bold text-blue-300 bg-blue-900/50 px-3 py-1.5 rounded-full border border-blue-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+
+              <button onClick={() => { playClick(); setSelectedDeck('TRADE'); }} className="bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-blue-500/50 hover:bg-blue-900/20 hover:border-blue-400 transition-all shadow-[0_5px_15px_rgba(59,130,246,0.15)] flex gap-4 items-center text-left group cursor-pointer hover:-translate-y-1">
+                <div className="relative shrink-0 w-[80px] h-[110px] bg-gradient-to-br from-blue-800/90 to-blue-950/90 rounded-lg shadow-lg border border-blue-500/50 flex flex-col items-center justify-between p-1.5 overflow-hidden group-hover:scale-105 transition-transform">
+                  <div className="absolute inset-1 border border-white/10 rounded pointer-events-none"></div>
+                  <div className="w-8 h-0.5 bg-white/20 rounded-full mt-0.5"></div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-md opacity-90">🤝</span>
+                  </div>
+                  <div className="w-full bg-black/40 rounded px-1 py-1 text-center border-t border-white/10 mt-1">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-blue-300 leading-tight mb-0.5">ĐỐI NGOẠI</p>
+                    <p className="text-[5px] text-slate-400 font-bold uppercase tracking-wider">FDI & Hợp Tác</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-blue-400 mb-1 uppercase tracking-wider drop-shadow-sm">ĐỐI NGOẠI & FDI</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">Các lá bài tương tác, giao dịch, hợp tác hoặc cướp đoạt.</p>
+                  <span className="mt-2 inline-block text-[9px] font-bold text-blue-300 bg-blue-900/50 px-2 py-1 rounded border border-blue-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+                </div>
               </button>
-              <button onClick={() => { playClick(); setSelectedDeck('STRUGGLE'); }} className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-orange-500/50 hover:bg-orange-900/20 hover:border-orange-400 transition-all shadow-[0_5px_15px_rgba(249,115,22,0.15)] flex flex-col items-center text-center group cursor-pointer hover:-translate-y-1 md:col-start-1 md:col-end-3 lg:col-auto lg:col-span-1">
-                <h3 className="text-xl font-black text-orange-400 mb-3 uppercase tracking-wider group-hover:scale-110 transition-transform drop-shadow-sm">✊ Đấu Tranh</h3>
-                <p className="text-sm text-slate-300">Thẻ phạt cực nặng áp dụng riêng khi bạn chọn 'Sản xuất Bóc lột'.</p>
-                <span className="mt-4 text-[10px] font-bold text-orange-300 bg-orange-900/50 px-3 py-1.5 rounded-full border border-orange-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+
+              <button onClick={() => { playClick(); setSelectedDeck('STRUGGLE'); }} className="bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-amber-500/50 hover:bg-amber-900/20 hover:border-amber-400 transition-all shadow-[0_5px_15px_rgba(245,158,11,0.15)] flex gap-4 items-center text-left group cursor-pointer hover:-translate-y-1">
+                <div className="relative shrink-0 w-[80px] h-[110px] bg-gradient-to-br from-amber-800/90 to-amber-950/90 rounded-lg shadow-lg border border-amber-500/50 flex flex-col items-center justify-between p-1.5 overflow-hidden group-hover:scale-105 transition-transform">
+                  <div className="absolute inset-1 border border-white/10 rounded pointer-events-none"></div>
+                  <div className="w-8 h-0.5 bg-white/20 rounded-full mt-0.5"></div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-md opacity-90">⚖️</span>
+                  </div>
+                  <div className="w-full bg-black/40 rounded px-1 py-1 text-center border-t border-white/10 mt-1">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-amber-300 leading-tight mb-0.5">CẠNH TRANH</p>
+                    <p className="text-[5px] text-slate-400 font-bold uppercase tracking-wider">Thương Mại</p>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-amber-400 mb-1 uppercase tracking-wider drop-shadow-sm">Cạnh Tranh Thương Mại</h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">Phạt nặng khi sản xuất bóc lột, gây mất cân bằng nội bộ.</p>
+                  <span className="mt-2 inline-block text-[9px] font-bold text-amber-300 bg-amber-900/50 px-2 py-1 rounded border border-amber-500/30 uppercase tracking-widest">Xem Danh Sách</span>
+                </div>
               </button>
-              <button onClick={() => { playClick(); setSelectedDeck('BOSS'); }} className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-purple-500/50 hover:bg-purple-900/20 hover:border-purple-400 transition-all shadow-[0_5px_20px_rgba(168,85,247,0.2)] flex flex-col items-center text-center group cursor-pointer hover:-translate-y-1 md:col-span-2 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent"></div>
-                <h3 className="text-xl font-black text-purple-400 mb-3 uppercase tracking-wider group-hover:scale-110 transition-transform drop-shadow-sm relative z-10">💀 Boss Độc Quyền</h3>
-                <p className="text-sm text-slate-300 relative z-10">Thử thách cực đại ở Vòng 3. Yêu cầu toàn máy chủ hợp tác hoặc cạnh tranh để không bị vỡ nợ hàng loạt.</p>
-                <span className="mt-4 text-[10px] font-bold text-purple-300 bg-purple-900/50 px-3 py-1.5 rounded-full border border-purple-500/30 uppercase tracking-widest relative z-10">Xem Danh Sách</span>
+
+              <button onClick={() => { playClick(); setSelectedDeck('BOSS'); }} className="bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-purple-500/50 hover:bg-purple-900/20 hover:border-purple-400 transition-all shadow-[0_5px_20px_rgba(168,85,247,0.2)] flex gap-4 items-center text-left group cursor-pointer hover:-translate-y-1 md:col-span-2 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-transparent pointer-events-none"></div>
+                <div className="relative shrink-0 w-[80px] h-[110px] bg-gradient-to-br from-purple-800/90 to-purple-950/90 rounded-lg shadow-lg border border-purple-500/50 flex flex-col items-center justify-between p-1.5 overflow-hidden group-hover:scale-105 transition-transform z-10">
+                  <div className="absolute inset-1 border border-white/10 rounded pointer-events-none"></div>
+                  <div className="w-8 h-0.5 bg-white/20 rounded-full mt-0.5"></div>
+                  <div className="flex-1 flex items-center justify-center">
+                    <span className="text-3xl drop-shadow-md opacity-90">🏛️</span>
+                  </div>
+                  <div className="w-full bg-black/40 rounded px-1 py-1 text-center border-t border-white/10 mt-1">
+                    <p className="text-[7px] font-black uppercase tracking-widest text-purple-300 leading-tight mb-0.5">KHỦNG HOẢNG</p>
+                    <p className="text-[5px] text-slate-400 font-bold uppercase tracking-wider">Cấu Trúc</p>
+                  </div>
+                </div>
+                <div className="z-10 flex-1">
+                  <h3 className="text-xl font-black text-purple-400 mb-2 uppercase tracking-wider drop-shadow-sm flex items-center gap-2">Khủng Hoảng Cơ Cấu</h3>
+                  <p className="text-sm text-slate-300 leading-relaxed mb-3">Thử thách cực đại ở Vòng 3. Yêu cầu toàn bộ doanh nghiệp hợp tác hoặc cạnh tranh sinh tồn.</p>
+                  <span className="inline-block text-[10px] font-bold text-purple-300 bg-purple-900/80 px-3 py-1.5 rounded-md border border-purple-500/50 uppercase tracking-widest hover:bg-purple-800 transition-colors">Xem Bộ Bài Khủng Hoảng</span>
+                </div>
               </button>
+
             </div>
           </div>
         );
       case 'ROLES':
         return (
           <div className="flex flex-col gap-4 text-slate-200 overflow-y-auto max-h-[70vh] pr-2 custom-scrollbar">
-            <h2 className="text-3xl font-black text-amber-400 uppercase tracking-widest text-center mb-6 sticky top-0 bg-slate-900/80 backdrop-blur-md py-4 z-10 rounded-t-2xl border-b border-amber-900/30 drop-shadow-md">Vai Trò Người Chơi</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/5 border-l-4 border-l-red-500 shadow-xl transition-all hover:translate-x-1">
-                <h3 className="text-xl font-black text-red-400 mb-2 uppercase tracking-wide drop-shadow-sm">Doanh Nghiệp Nhà Nước</h3>
-                <p className="text-sm mb-4 text-slate-300">Nhận được sự bảo hộ của Chính phủ, thuận lợi trong việc áp đặt luật lệ.</p>
-                <div className="bg-black/40 p-3 rounded-xl border border-white/10 text-center text-sm font-bold text-amber-300 shadow-inner">
-                  Khởi điểm: 1 💰 | 1 👷 | 0 💻 | 3 📜
+            <h2 className="text-3xl font-black text-amber-400 uppercase tracking-widest text-center mb-2 sticky top-0 bg-slate-900/80 backdrop-blur-md py-4 z-10 rounded-t-2xl border-b border-amber-900/30 drop-shadow-md">Vai Trò Người Chơi</h2>
+            <p className="text-center text-sm text-slate-400 mb-4">Chọn phe kinh tế của bạn – mỗi phe có chiến lược và điểm mạnh riêng biệt</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              
+              {/* Doanh Nghiệp Nhà Nước */}
+              <div className="group relative rounded-2xl overflow-hidden shadow-2xl border border-red-500/30 hover:border-red-400/60 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(239,68,68,0.25)] cursor-default min-h-[200px]">
+                {/* Background image */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800')" }}
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-red-950/80 to-red-900/30"></div>
+                {/* Tinted top-left accent */}
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-red-400 to-red-700"></div>
+                
+                {/* Content */}
+                <div className="relative z-10 p-5 flex flex-col h-full justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-red-800/80 border border-red-500/50 backdrop-blur-sm flex items-center justify-center text-2xl shadow-lg">🏛️</div>
+                      <div>
+                        <h3 className="text-lg font-black text-red-300 uppercase tracking-wider leading-tight drop-shadow-lg">Doanh Nghiệp Nhà Nước</h3>
+                        <span className="text-[9px] text-red-400/80 font-bold uppercase tracking-widest">State-owned Enterprise</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-300/90 leading-relaxed mb-4">Nhận được sự bảo hộ của Chính phủ, thuận lợi trong việc áp đặt luật lệ và chính sách.</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="text-[9px] font-bold bg-red-900/60 border border-red-500/40 text-red-300 px-2 py-1 rounded-full backdrop-blur-sm">⚡ Mạnh: Chính Sách</span>
+                      <span className="text-[9px] font-bold bg-slate-900/60 border border-slate-600/40 text-slate-400 px-2 py-1 rounded-full backdrop-blur-sm">🛡️ Kháng: Khủng Hoảng</span>
+                    </div>
+                    <div className="bg-black/50 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10 text-center text-sm font-black text-amber-300 shadow-inner tracking-wider">
+                      Khởi điểm: 1💰 1👷 0💻 3📜
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/5 border-l-4 border-l-blue-500 shadow-xl transition-all hover:translate-x-1">
-                <h3 className="text-xl font-black text-blue-400 mb-2 uppercase tracking-wide drop-shadow-sm">Kinh Tế Tư Nhân</h3>
-                <p className="text-sm mb-4 text-slate-300">Nhanh nhẹn và linh hoạt, có khả năng sinh lời Tư bản vượt trội.</p>
-                <div className="bg-black/40 p-3 rounded-xl border border-white/10 text-center text-sm font-bold text-amber-300 shadow-inner">
-                  Khởi điểm: 3 💰 | 2 👷 | 0 💻 | 0 📜
+
+              {/* Kinh Tế Tư Nhân */}
+              <div className="group relative rounded-2xl overflow-hidden shadow-2xl border border-blue-500/30 hover:border-blue-400/60 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(59,130,246,0.25)] cursor-default min-h-[200px]">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800')" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-blue-950/80 to-blue-900/30"></div>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-400 to-blue-700"></div>
+                
+                <div className="relative z-10 p-5 flex flex-col h-full justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-blue-800/80 border border-blue-500/50 backdrop-blur-sm flex items-center justify-center text-2xl shadow-lg">🏢</div>
+                      <div>
+                        <h3 className="text-lg font-black text-blue-300 uppercase tracking-wider leading-tight drop-shadow-lg">Kinh Tế Tư Nhân</h3>
+                        <span className="text-[9px] text-blue-400/80 font-bold uppercase tracking-widest">Private Sector</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-300/90 leading-relaxed mb-4">Nhanh nhẹn và linh hoạt, có khả năng sinh lời Tư bản vượt trội so với các đối thủ.</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="text-[9px] font-bold bg-blue-900/60 border border-blue-500/40 text-blue-300 px-2 py-1 rounded-full backdrop-blur-sm">⚡ Mạnh: Tư Bản</span>
+                      <span className="text-[9px] font-bold bg-slate-900/60 border border-slate-600/40 text-slate-400 px-2 py-1 rounded-full backdrop-blur-sm">🚀 Cơ động nhất</span>
+                    </div>
+                    <div className="bg-black/50 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10 text-center text-sm font-black text-amber-300 shadow-inner tracking-wider">
+                      Khởi điểm: 3💰 2👷 0💻 0📜
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/5 border-l-4 border-l-amber-500 shadow-xl transition-all hover:translate-x-1">
-                <h3 className="text-xl font-black text-amber-400 mb-2 uppercase tracking-wide drop-shadow-sm">Khối FDI</h3>
-                <p className="text-sm mb-4 text-slate-300">Dồi dào sức mạnh Công nghệ, dễ dàng vươn ra thị trường quốc tế.</p>
-                <div className="bg-black/40 p-3 rounded-xl border border-white/10 text-center text-sm font-bold text-amber-300 shadow-inner">
-                  Khởi điểm: 2 💰 | 0 👷 | 3 💻 | 0 📜
+
+              {/* Khối FDI */}
+              <div className="group relative rounded-2xl overflow-hidden shadow-2xl border border-amber-500/30 hover:border-amber-400/60 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(245,158,11,0.25)] cursor-default min-h-[200px]">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800')" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-amber-950/80 to-amber-900/30"></div>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-amber-400 to-amber-700"></div>
+                
+                <div className="relative z-10 p-5 flex flex-col h-full justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-amber-800/80 border border-amber-500/50 backdrop-blur-sm flex items-center justify-center text-2xl shadow-lg">🌐</div>
+                      <div>
+                        <h3 className="text-lg font-black text-amber-300 uppercase tracking-wider leading-tight drop-shadow-lg">Khối FDI</h3>
+                        <span className="text-[9px] text-amber-400/80 font-bold uppercase tracking-widest">Foreign Direct Investment</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-300/90 leading-relaxed mb-4">Dồi dào sức mạnh Công nghệ, dễ dàng vươn ra thị trường quốc tế nhưng điểm Xã hội thấp.</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="text-[9px] font-bold bg-amber-900/60 border border-amber-500/40 text-amber-300 px-2 py-1 rounded-full backdrop-blur-sm">⚡ Mạnh: Công Nghệ</span>
+                      <span className="text-[9px] font-bold bg-slate-900/60 border border-slate-600/40 text-slate-400 px-2 py-1 rounded-full backdrop-blur-sm">🌏 Quốc Tế</span>
+                    </div>
+                    <div className="bg-black/50 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10 text-center text-sm font-black text-amber-300 shadow-inner tracking-wider">
+                      Khởi điểm: 2💰 0👷 3💻 0📜
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/5 border-l-4 border-l-emerald-500 shadow-xl transition-all hover:translate-x-1">
-                <h3 className="text-xl font-black text-emerald-400 mb-2 uppercase tracking-wide drop-shadow-sm">Kinh Tế Tập Thể / HTX</h3>
-                <p className="text-sm mb-4 text-slate-300">Lợi thế Điểm Xã hội khổng lồ, luôn được cộng đồng ủng hộ.</p>
-                <div className="bg-black/40 p-3 rounded-xl border border-white/10 text-center text-sm font-bold text-amber-300 shadow-inner">
-                  Khởi điểm: 1 💰 | 3 👷 | 0 💻 | 1 📜
+
+              {/* Kinh Tế Tập Thể / HTX */}
+              <div className="group relative rounded-2xl overflow-hidden shadow-2xl border border-emerald-500/30 hover:border-emerald-400/60 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(16,185,129,0.25)] cursor-default min-h-[200px]">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{ backgroundImage: "url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=800')" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-emerald-950/80 to-emerald-900/30"></div>
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-emerald-400 to-emerald-700"></div>
+                
+                <div className="relative z-10 p-5 flex flex-col h-full justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-800/80 border border-emerald-500/50 backdrop-blur-sm flex items-center justify-center text-2xl shadow-lg">🌾</div>
+                      <div>
+                        <h3 className="text-lg font-black text-emerald-300 uppercase tracking-wider leading-tight drop-shadow-lg">Kinh Tế Tập Thể</h3>
+                        <span className="text-[9px] text-emerald-400/80 font-bold uppercase tracking-widest">Cooperative Economy / HTX</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-300/90 leading-relaxed mb-4">Lợi thế Điểm Xã hội khổng lồ, luôn được cộng đồng ủng hộ khi hợp tác.</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="text-[9px] font-bold bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 px-2 py-1 rounded-full backdrop-blur-sm">⚡ Mạnh: Lao Động</span>
+                      <span className="text-[9px] font-bold bg-slate-900/60 border border-slate-600/40 text-slate-400 px-2 py-1 rounded-full backdrop-blur-sm">🤝 Điểm XH cao</span>
+                    </div>
+                    <div className="bg-black/50 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/10 text-center text-sm font-black text-amber-300 shadow-inner tracking-wider">
+                      Khởi điểm: 1💰 3👷 0💻 1📜
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         );
@@ -189,30 +367,30 @@ export const MainMenu = ({ onStart }) => {
 
         <button 
           onClick={() => { playSuccess(); onStart(); }}
-          className="w-full py-4 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-black uppercase tracking-[0.2em] text-xl md:text-2xl rounded-2xl shadow-[0_15px_40px_rgba(245,158,11,0.4)] border-b-4 border-orange-900 active:border-b-0 active:translate-y-1 transition-all group relative overflow-hidden mt-4"
+          className="w-full py-4 bg-blue-700 hover:bg-blue-600 text-white font-semibold uppercase tracking-widest text-lg md:text-xl rounded shadow-md transition-all relative overflow-hidden mt-4"
         >
-          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-          <span className="relative z-10 drop-shadow-md">BẮT ĐẦU</span>
+          <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+          <span className="relative z-10">BẮT ĐẦU</span>
         </button>
 
         <div className="flex flex-col gap-3 w-full">
           <button 
             onClick={() => { playClick(); setShowModal('TUTORIAL'); }}
-            className="w-full py-3 bg-slate-800/40 hover:bg-slate-700/60 text-slate-200 font-bold uppercase tracking-widest text-xs md:text-sm rounded-xl border border-slate-500/30 hover:border-amber-400/50 backdrop-blur-md shadow-lg transition-all"
+            className="w-full py-3 bg-slate-800/60 hover:bg-slate-700 text-slate-200 font-medium uppercase tracking-wider text-xs md:text-sm rounded border border-slate-600 hover:border-blue-400/50 backdrop-blur-sm transition-all"
           >
             Hướng Dẫn Cách Chơi
           </button>
 
           <button 
             onClick={() => { playClick(); setShowModal('DECKS'); }}
-            className="w-full py-3 bg-slate-800/40 hover:bg-slate-700/60 text-slate-200 font-bold uppercase tracking-widest text-xs md:text-sm rounded-xl border border-slate-500/30 hover:border-amber-400/50 backdrop-blur-md shadow-lg transition-all"
+            className="w-full py-3 bg-slate-800/60 hover:bg-slate-700 text-slate-200 font-medium uppercase tracking-wider text-xs md:text-sm rounded border border-slate-600 hover:border-blue-400/50 backdrop-blur-sm transition-all"
           >
             Bộ Bài Trong Game
           </button>
 
           <button 
             onClick={() => { playClick(); setShowModal('ROLES'); }}
-            className="w-full py-3 bg-slate-800/40 hover:bg-slate-700/60 text-slate-200 font-bold uppercase tracking-widest text-xs md:text-sm rounded-xl border border-slate-500/30 hover:border-amber-400/50 backdrop-blur-md shadow-lg transition-all"
+            className="w-full py-3 bg-slate-800/60 hover:bg-slate-700 text-slate-200 font-medium uppercase tracking-wider text-xs md:text-sm rounded border border-slate-600 hover:border-blue-400/50 backdrop-blur-sm transition-all"
           >
             Vai Trò Người Chơi
           </button>
@@ -232,7 +410,7 @@ export const MainMenu = ({ onStart }) => {
                   setShowModal(null);
                   setSelectedDeck(null);
                 }}
-                className="px-12 py-4 bg-slate-700 hover:bg-slate-600 text-white font-black uppercase tracking-widest text-lg rounded-xl border-b-4 border-slate-800 active:border-b-0 active:translate-y-1 transition-all shadow-lg"
+                className="px-10 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold uppercase tracking-wider text-sm md:text-base rounded border border-slate-600 transition-all shadow"
               >
                 ĐÓNG LẠI
               </button>

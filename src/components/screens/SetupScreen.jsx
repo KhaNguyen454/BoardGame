@@ -22,6 +22,13 @@ const FACTION_TEXT = {
   'Kinh tế Tập thể / HTX': 'text-emerald-400'
 };
 
+const FACTION_IMAGES = {
+  'Doanh nghiệp Nhà nước': 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400',
+  'Kinh tế Tư nhân': 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400',
+  'Khối FDI': 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=400',
+  'Kinh tế Tập thể / HTX': 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=400'
+};
+
 export const SetupScreen = ({ onStartGame, onBack }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playersConfig, setPlayersConfig] = useState({
@@ -71,36 +78,40 @@ export const SetupScreen = ({ onStartGame, onBack }) => {
           {Array.from({ length: numPlayers }).map((_, id) => {
              const faction = playersConfig[id].faction;
              return (
-               <div key={id} className={`bg-gradient-to-br ${FACTION_COLORS[faction]} p-4 rounded-3xl border shadow-xl backdrop-blur-xl flex flex-col gap-4 transition-all duration-300 hover:scale-[1.02] relative overflow-hidden group`}>
-                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-10 mix-blend-overlay group-hover:scale-110 transition-transform duration-700"></div>
+               <div key={id} className={`bg-gradient-to-br ${FACTION_COLORS[faction]} rounded-3xl border shadow-xl backdrop-blur-xl flex flex-col transition-all duration-300 hover:scale-[1.02] relative overflow-hidden group`}>
+                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-10 mix-blend-overlay group-hover:scale-110 transition-transform duration-700 pointer-events-none"></div>
                  
-                 <div className="text-center border-b border-white/10 pb-3 relative z-10">
-                   <h3 className={`font-black text-2xl uppercase tracking-widest drop-shadow-md ${FACTION_TEXT[faction]}`}>P{id + 1}</h3>
+                 <div className="h-28 relative overflow-hidden shrink-0">
+                   <img src={FACTION_IMAGES[faction]} alt={faction} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-80" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                   <h3 className={`absolute bottom-2 left-0 right-0 text-center font-black text-2xl uppercase tracking-widest drop-shadow-md ${FACTION_TEXT[faction]}`}>P{id + 1}</h3>
                  </div>
                  
-                 <div className="flex flex-col gap-2 relative z-10">
-                   <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Tên Định Danh</label>
-                   <input 
-                     type="text" 
-                     value={playersConfig[id].name}
-                     onChange={(e) => handleUpdate(id, 'name', e.target.value)}
-                     className="bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white font-bold outline-none focus:bg-black/60 transition-colors shadow-inner"
-                   />
-                 </div>
+                 <div className="p-4 flex flex-col gap-4 relative z-10 flex-1">
+                   <div className="flex flex-col gap-2 relative z-10">
+                     <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Tên Định Danh</label>
+                     <input 
+                       type="text" 
+                       value={playersConfig[id].name}
+                       onChange={(e) => handleUpdate(id, 'name', e.target.value)}
+                       className="bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white font-bold outline-none focus:bg-black/60 transition-colors shadow-inner"
+                     />
+                   </div>
 
-                 <div className="flex flex-col gap-2 relative z-10">
-                   <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Hình Thái Kinh Tế</label>
-                   <div className="relative">
-                     <select 
-                       value={playersConfig[id].faction}
-                       onChange={(e) => handleUpdate(id, 'faction', e.target.value)}
-                       className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white font-bold outline-none focus:bg-black/60 transition-colors shadow-inner appearance-none cursor-pointer"
-                     >
-                       {FACTIONS.map(f => (
-                         <option key={f} value={f} className="bg-slate-900 text-white">{f}</option>
-                       ))}
-                     </select>
-                     <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">▼</div>
+                   <div className="flex flex-col gap-2 relative z-10">
+                     <label className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Hình Thái Kinh Tế</label>
+                     <div className="relative">
+                       <select 
+                         value={playersConfig[id].faction}
+                         onChange={(e) => handleUpdate(id, 'faction', e.target.value)}
+                         className="w-full bg-black/40 border border-white/10 rounded-xl p-3 text-sm text-white font-bold outline-none focus:bg-black/60 transition-colors shadow-inner appearance-none cursor-pointer"
+                       >
+                         {FACTIONS.map(f => (
+                           <option key={f} value={f} className="bg-slate-900 text-white">{f}</option>
+                         ))}
+                       </select>
+                       <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">▼</div>
+                     </div>
                    </div>
                  </div>
                </div>
@@ -116,14 +127,14 @@ export const SetupScreen = ({ onStartGame, onBack }) => {
                for(let i = 0; i < numPlayers; i++) finalConfig[i] = playersConfig[i];
                onStartGame(finalConfig, numPlayers);
             }}
-            className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black uppercase tracking-widest text-base rounded-2xl shadow-[0_10px_30px_rgba(16,185,129,0.4)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all"
+            className="flex-1 py-3 bg-blue-700 hover:bg-blue-600 text-white font-semibold uppercase tracking-widest text-sm md:text-base rounded transition-all shadow-sm"
           >
             BẮT ĐẦU NGAY
           </button>
 
           <button 
             onClick={() => { playClick(); onBack(); }}
-            className="flex-[0.5] py-3 bg-slate-800/80 border-2 border-slate-600 hover:border-slate-400 text-slate-300 hover:text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-lg active:translate-y-1 transition-all backdrop-blur-md"
+            className="flex-[0.5] py-3 bg-transparent border border-slate-500 hover:border-slate-300 hover:bg-slate-800/50 text-slate-300 hover:text-white font-semibold uppercase tracking-widest text-xs md:text-sm rounded transition-all"
           >
             QUAY LẠI
           </button>
