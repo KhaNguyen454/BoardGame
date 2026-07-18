@@ -212,22 +212,22 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                     })()}
                   </div>
                 ) : (
-                  <button onClick={() => moves.confirmRoll()} className="w-full py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl shadow-[0_10px_20px_rgba(16,185,129,0.4)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all mt-4">
-                    <span className="font-black text-2xl uppercase tracking-[0.2em]">TIẾP TỤC</span>
+                  <button onClick={() => moves.confirmRoll()} className="w-full py-3 bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl shadow-md border border-teal-500/50 active:translate-y-1 transition-all mt-4 backdrop-blur-sm">
+                    <span className="font-bold text-lg uppercase tracking-[0.1em]">TIẾP TỤC</span>
                   </button>
                 )}
               </div>
             ) : (
-              <div className="flex flex-col gap-8 h-full justify-center">
-                <div className="flex justify-center gap-6 drop-shadow-[0_0_15px_rgba(79,70,229,0.5)]">
+              <div className="flex flex-col gap-6 h-full justify-center">
+                <div className="flex justify-center gap-4 drop-shadow-[0_0_15px_rgba(79,70,229,0.5)]">
                    <div className={`text-8xl ${isRolling ? 'animate-spin' : 'animate-bounce'}`} style={{animationDelay: '0s'}}>🎲</div>
                    <div className={`text-8xl ${isRolling ? 'animate-spin' : 'animate-bounce'}`} style={{animationDelay: '0.2s'}}>🎲</div>
                 </div>
-                <button disabled={isRolling} onClick={handleRoll} className="w-full py-8 bg-gradient-to-b from-indigo-500 to-indigo-700 hover:from-indigo-400 hover:to-indigo-600 active:from-indigo-600 active:to-indigo-800 disabled:opacity-50 text-white rounded-[2rem] shadow-[0_15px_30px_rgba(79,70,229,0.5)] border-b-8 border-indigo-950 active:border-b-0 active:translate-y-2 transition-all group">
-                  <span className="font-black text-3xl uppercase tracking-widest text-shadow">{isRolling ? 'Đang Lắc...' : 'Đổ Xúc Xắc'}</span>
+                <button disabled={isRolling} onClick={handleRoll} className="w-full py-3 bg-gradient-to-r from-indigo-600/90 to-indigo-800/90 hover:from-indigo-500 hover:to-indigo-700 active:from-indigo-700 active:to-indigo-900 disabled:opacity-50 text-white rounded-xl shadow-md border border-indigo-500/50 active:translate-y-1 transition-all group backdrop-blur-sm">
+                  <span className="font-bold text-base uppercase tracking-widest text-shadow">{isRolling ? 'Đang Lắc...' : 'Đổ Xúc Xắc'}</span>
                 </button>
                 <div className="text-center">
-                  <p className="text-indigo-300/80 text-sm font-bold uppercase tracking-widest">Nhận Vốn, Lao Động, Công Nghệ hoặc Chính Sách</p>
+                  <p className="text-indigo-300/80 text-[10px] md:text-xs font-semibold uppercase tracking-wider">Nhận Vốn, Lao Động, Công Nghệ hoặc Chính Sách</p>
                 </div>
               </div>
             )}
@@ -236,43 +236,43 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
 
       case 'produce':
         return (
-          <div className="flex flex-col gap-6 h-full justify-center">
-            <div className="text-center px-4">
-              <p className="text-slate-300 font-bold uppercase tracking-wider text-sm mb-4">Quyết định phương thức sản xuất:</p>
+          <div className="flex flex-col gap-4 h-full justify-center">
+            <div className="text-center px-2">
+              <p className="text-slate-300 font-bold uppercase tracking-wider text-xs mb-2">Quyết định phương thức sản xuất:</p>
             </div>
             
             <button 
               disabled={!(p.resources.capital >= 1 && p.resources.labor >= 1 && p.resources.tech >= 1)}
               onClick={() => moves.produceResources(1)} 
-              className="w-full p-6 bg-gradient-to-br from-emerald-500 to-emerald-800 hover:from-emerald-400 hover:to-emerald-700 disabled:from-slate-800 disabled:to-slate-900 disabled:cursor-not-allowed text-white rounded-[2rem] shadow-[0_15px_30px_rgba(16,185,129,0.3)] disabled:shadow-none border-b-8 border-emerald-950 disabled:border-slate-950 active:border-b-0 active:translate-y-2 transition-all flex flex-col items-center gap-3 relative overflow-hidden group"
+              className="w-full p-4 bg-gradient-to-r from-emerald-900/80 to-slate-900 hover:from-emerald-800 hover:to-slate-800 disabled:from-slate-900 disabled:to-slate-950 disabled:cursor-not-allowed text-emerald-100 rounded-xl shadow-md border border-emerald-600/30 hover:border-emerald-500/50 disabled:border-slate-800 active:translate-y-1 transition-all flex flex-col gap-2 relative overflow-hidden group backdrop-blur-sm"
             >
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20 group-hover:scale-110 transition-transform duration-700"></div>
-              <div className="flex items-center gap-4 relative z-10 w-full justify-center">
-                <span className="text-4xl flex-shrink-0">🌱</span>
-                <span className="font-black text-lg md:text-xl uppercase tracking-widest text-shadow whitespace-nowrap overflow-hidden text-ellipsis">Sản Xuất Bền Vững</span>
-              </div>
-              <div className="bg-black/40 px-6 py-2 rounded-xl relative z-10 w-full text-center border border-white/10 whitespace-normal">
-                <span className="text-sm text-emerald-100 font-bold tracking-wide">Tốn 1💰 1👷 1💻 ➡️ <strong className="text-emerald-300">Nhận 3 Tư Bản</strong></span>
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-10 group-hover:scale-110 transition-transform duration-700"></div>
+              <div className="flex items-center gap-4 relative z-10 w-full">
+                <span className="text-3xl flex-shrink-0 bg-emerald-950 p-3 rounded-lg border border-emerald-800/50">🌱</span>
+                <div className="flex flex-col items-start text-left">
+                  <span className="font-bold text-base uppercase tracking-wider text-shadow">Sản Xuất Bền Vững</span>
+                  <span className="text-xs text-emerald-200/80 font-semibold tracking-wide mt-1">Tốn 1💰 1👷 1💻 ➡️ <strong className="text-emerald-400">Nhận 3 Tư Bản</strong></span>
+                </div>
               </div>
             </button>
 
             <button 
               disabled={!(p.resources.capital >= 1 && p.resources.labor >= 1)}
               onClick={() => moves.produceResources(2)} 
-              className="w-full p-6 bg-gradient-to-br from-rose-600 to-rose-900 hover:from-rose-500 hover:to-rose-800 disabled:from-slate-800 disabled:to-slate-900 disabled:cursor-not-allowed text-white rounded-[2rem] shadow-[0_15px_30px_rgba(225,29,72,0.3)] disabled:shadow-none border-b-8 border-rose-950 disabled:border-slate-950 active:border-b-0 active:translate-y-2 transition-all flex flex-col items-center gap-3 relative overflow-hidden group"
+              className="w-full p-4 bg-gradient-to-r from-rose-900/80 to-slate-900 hover:from-rose-800 hover:to-slate-800 disabled:from-slate-900 disabled:to-slate-950 disabled:cursor-not-allowed text-rose-100 rounded-xl shadow-md border border-rose-600/30 hover:border-rose-500/50 disabled:border-slate-800 active:translate-y-1 transition-all flex flex-col gap-2 relative overflow-hidden group backdrop-blur-sm"
             >
-              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20 group-hover:scale-110 transition-transform duration-700"></div>
-              <div className="flex items-center gap-4 relative z-10 w-full justify-center">
-                <span className="text-4xl flex-shrink-0">🔥</span>
-                <span className="font-black text-lg md:text-xl uppercase tracking-widest text-shadow whitespace-nowrap overflow-hidden text-ellipsis">Sản Xuất Bóc Lột</span>
-              </div>
-              <div className="bg-black/40 px-6 py-2 rounded-xl relative z-10 w-full text-center border border-white/10 whitespace-normal">
-                <span className="text-sm text-rose-100 font-bold tracking-wide">Tốn 1💰 1👷 ➡️ <strong className="text-rose-300">Nhận 3 Tư Bản + Rút Thẻ Phạt</strong></span>
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-10 group-hover:scale-110 transition-transform duration-700"></div>
+              <div className="flex items-center gap-4 relative z-10 w-full">
+                <span className="text-3xl flex-shrink-0 bg-rose-950 p-3 rounded-lg border border-rose-800/50">🔥</span>
+                <div className="flex flex-col items-start text-left">
+                  <span className="font-bold text-base uppercase tracking-wider text-shadow">Sản Xuất Bóc Lột</span>
+                  <span className="text-xs text-rose-200/80 font-semibold tracking-wide mt-1">Tốn 1💰 1👷 ➡️ <strong className="text-rose-400">Nhận 3 Tư Bản + Rút Thẻ Phạt</strong></span>
+                </div>
               </div>
             </button>
 
-            <div className="mt-2 text-center">
-              <button onClick={() => moves.produceResources(3)} className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 font-bold uppercase tracking-widest rounded-full transition-colors border border-slate-700">
+            <div className="mt-1 text-center">
+              <button onClick={() => moves.produceResources(3)} className="px-6 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 font-bold text-[10px] uppercase tracking-wider rounded-full transition-colors border border-slate-700">
                 Bỏ qua bước này
               </button>
             </div>
@@ -329,8 +329,8 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                        </div>
                      </div>
                    </div>
-                   <button onClick={() => moves.confirmEvent()} className="w-full py-8 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-[2rem] shadow-[0_15px_30px_rgba(16,185,129,0.4)] border-b-8 border-teal-900 active:border-b-0 active:translate-y-2 transition-all group">
-                     <span className="font-black text-3xl uppercase tracking-[0.2em] text-shadow group-hover:scale-105 inline-block transition-transform">XÁC NHẬN HIỆU ỨNG</span>
+                   <button onClick={() => moves.confirmEvent()} className="w-full py-4 mt-2 bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl shadow-md border border-emerald-500/50 active:translate-y-1 transition-all group backdrop-blur-sm">
+                     <span className="font-bold text-lg uppercase tracking-[0.1em] text-shadow group-hover:scale-105 inline-block transition-transform">XÁC NHẬN HIỆU ỨNG</span>
                    </button>
                 </div>
              </div>
@@ -340,54 +340,46 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
         const btnText = isAnimatingDraw ? 'Đang chọn bài...' : 'Rút Thẻ Sự Kiện';
 
         return (
-          <div className="flex flex-col gap-10 h-full justify-center px-4 animate-fade-in">
-              <div className="flex flex-col gap-4">
-                {/* Hàng 1: Cơ Hội, Rủi Ro, Tương Tác */}
-                <div className="grid grid-cols-3 gap-3">
-                  {/* Card 0: Cơ Hội */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-300 ${animatingCardIndex === 0 ? 'scale-110 drop-shadow-[0_0_20px_gold] z-10' : ''}`}>
-                    <div className={`w-full aspect-[2/3] bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl shadow-lg border-2 ${animatingCardIndex === 0 ? 'border-yellow-300' : 'border-emerald-300'} flex items-center justify-center transform -rotate-3`}>
-                      <span className="text-4xl drop-shadow-md">🌟</span>
-                    </div>
-                    <span className="text-[10px] font-black text-emerald-200 uppercase tracking-widest text-center">Cơ Hội</span>
-                  </div>
-                  {/* Card 1: Rủi Ro */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-300 ${animatingCardIndex === 1 ? 'scale-110 drop-shadow-[0_0_20px_gold] z-10' : ''}`}>
-                    <div className={`w-full aspect-[2/3] bg-gradient-to-br from-rose-500 to-red-700 rounded-xl shadow-lg border-2 ${animatingCardIndex === 1 ? 'border-yellow-300' : 'border-rose-300'} flex items-center justify-center transform translate-y-2`}>
-                      <span className="text-4xl drop-shadow-md">⚠️</span>
-                    </div>
-                    <span className="text-[10px] font-black text-rose-200 uppercase tracking-widest text-center">Rủi Ro</span>
-                  </div>
-                  {/* Card 2: Tương Tác */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-300 ${animatingCardIndex === 2 ? 'scale-110 drop-shadow-[0_0_20px_gold] z-10' : ''}`}>
-                    <div className={`w-full aspect-[2/3] bg-gradient-to-br from-blue-400 to-indigo-600 rounded-xl shadow-lg border-2 ${animatingCardIndex === 2 ? 'border-yellow-300' : 'border-blue-300'} flex items-center justify-center transform rotate-3`}>
-                      <span className="text-4xl drop-shadow-md">🤝</span>
-                    </div>
-                    <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest text-center">Tương Tác</span>
-                  </div>
-                </div>
-
-                {/* Hàng 2: Đấu Tranh, Boss */}
-                <div className="grid grid-cols-2 gap-6 px-6 mt-2">
-                  {/* Card 3: Đấu Tranh */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-300 ${!G.isExploiting ? 'opacity-30 grayscale' : 'opacity-100'} ${animatingCardIndex === 3 ? 'scale-110 drop-shadow-[0_0_20px_gold] z-10' : ''}`}>
-                    <div className={`w-full aspect-[2/3] bg-gradient-to-br from-amber-500 to-orange-700 rounded-xl shadow-lg border-2 ${animatingCardIndex === 3 ? 'border-yellow-300' : 'border-amber-300'} flex items-center justify-center transform -rotate-6`}>
-                      <span className="text-5xl drop-shadow-md">✊</span>
-                    </div>
-                    <span className="text-[10px] font-black text-amber-200 uppercase tracking-widest text-center">Đấu Tranh</span>
-                  </div>
-                  {/* Card 4: Boss */}
-                  <div className={`flex flex-col items-center gap-2 transition-all duration-300 ${!isRing3 ? 'opacity-30 grayscale' : 'opacity-100'} ${animatingCardIndex === 4 ? 'scale-110 drop-shadow-[0_0_20px_gold] z-10' : ''}`}>
-                    <div className={`w-full aspect-[2/3] bg-gradient-to-br from-purple-600 to-purple-900 rounded-xl shadow-lg border-2 ${animatingCardIndex === 4 ? 'border-yellow-300' : 'border-purple-400'} flex items-center justify-center transform rotate-6`}>
-                      <span className="text-5xl drop-shadow-md">💀</span>
-                    </div>
-                    <span className="text-[10px] font-black text-purple-200 uppercase tracking-widest text-center">Boss Độc Quyền</span>
-                  </div>
+          <div className="flex flex-col gap-4 h-full justify-center px-2 animate-fade-in">
+              <div className="flex flex-col gap-2">
+                {/* Cards Container */}
+                <div className="flex flex-wrap justify-center gap-3">
+                  {[
+                    { id: 0, title: 'CƠ HỘI', subtitle: 'Đầu Tư', emoji: '📈', colors: 'from-emerald-800/90 to-emerald-950/90 border-emerald-500/50', text: 'text-emerald-300', glow: 'drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]', delay: '0ms' },
+                    { id: 1, title: 'RỦI RO', subtitle: 'Thị Trường', emoji: '📉', colors: 'from-rose-800/90 to-rose-950/90 border-rose-500/50', text: 'text-rose-300', glow: 'drop-shadow-[0_0_15px_rgba(225,29,72,0.5)]', delay: '100ms' },
+                    { id: 2, title: 'ĐỐI NGOẠI', subtitle: 'FDI & Hợp Tác', emoji: '🤝', colors: 'from-blue-800/90 to-blue-950/90 border-blue-500/50', text: 'text-blue-300', glow: 'drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]', delay: '200ms' },
+                    { id: 3, title: 'CẠNH TRANH', subtitle: 'Thương Mại', emoji: '⚖️', colors: 'from-amber-800/90 to-amber-950/90 border-amber-500/50', text: 'text-amber-300', glow: 'drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]', delay: '300ms', isExploit: true },
+                    { id: 4, title: 'KHỦNG HOẢNG', subtitle: 'Cấu Trúc', emoji: '🏛️', colors: 'from-purple-800/90 to-purple-950/90 border-purple-500/50', text: 'text-purple-300', glow: 'drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]', delay: '400ms', isBoss: true }
+                  ].map(card => {
+                    const isActive = animatingCardIndex === card.id;
+                    const isDimmed = (card.isExploit && !G.isExploiting) || (card.isBoss && !isRing3);
+                    return (
+                      <div key={card.id} className={`flex flex-col items-center gap-2 transition-all duration-500 ${isDimmed ? 'opacity-30 grayscale' : 'opacity-100'} ${isActive ? `scale-110 ${card.glow} z-10` : 'scale-95 hover:scale-100'}`} style={{ transitionDelay: isActive ? '0ms' : card.delay }}>
+                        <div className={`relative w-[100px] h-[140px] bg-gradient-to-br ${card.colors} rounded-xl shadow-lg border flex flex-col items-center justify-between p-2.5 overflow-hidden backdrop-blur-md ${isActive ? 'border-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.6)]' : ''}`}>
+                          {/* Inner subtle border */}
+                          <div className="absolute inset-1 border border-white/10 rounded-lg pointer-events-none"></div>
+                          {/* Top accent line */}
+                          <div className="w-12 h-1 bg-white/20 rounded-full mt-0.5"></div>
+                          
+                          {/* Icon */}
+                          <div className="flex-1 flex items-center justify-center">
+                            <span className="text-4xl drop-shadow-md opacity-90">{card.emoji}</span>
+                          </div>
+                          
+                          {/* Text Area */}
+                          <div className="w-full bg-black/40 rounded px-1.5 py-2 text-center border-t border-white/10 mt-1">
+                            <p className={`text-[10px] font-black uppercase tracking-widest ${card.text} leading-tight mb-0.5`}>{card.title}</p>
+                            <p className="text-[7px] text-slate-400 font-bold uppercase tracking-wider">{card.subtitle}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              <button disabled={isAnimatingDraw} onClick={handleDrawCard} className="w-full py-8 bg-gradient-to-b from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 active:from-orange-600 active:to-orange-800 disabled:opacity-50 text-white rounded-[2rem] shadow-[0_15px_30px_rgba(249,115,22,0.4)] border-b-8 border-orange-950 active:border-b-0 active:translate-y-2 transition-all">
-                <span className="font-black text-2xl uppercase tracking-[0.2em] text-shadow">{btnText}</span>
+              <button disabled={isAnimatingDraw} onClick={handleDrawCard} className="w-full py-3 mt-4 bg-gradient-to-r from-orange-600/90 to-amber-600/90 hover:from-orange-500 hover:to-amber-500 active:from-orange-700 active:to-amber-700 disabled:opacity-50 text-white rounded-xl shadow-md border border-orange-500/50 active:translate-y-1 transition-all backdrop-blur-sm">
+                <span className="font-bold text-base uppercase tracking-widest text-shadow">{btnText}</span>
               </button>
           </div>
         );
@@ -414,55 +406,59 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
            }
 
            return (
-             <div className="flex flex-col gap-4 h-full justify-start mt-6">
-               <div className="bg-slate-800 p-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-amber-500/50 flex flex-col gap-4">
-                 <div className="text-center border-b border-slate-700 pb-4">
-                   <p className="text-amber-400 font-black uppercase tracking-widest text-sm">Bán Tối Đa 2 Token</p>
-                   <p className="text-[10px] text-slate-400 mt-1">Phần thưởng: Cả 2 nhận +1 Điểm XH</p>
+             <div className="flex flex-col gap-2 h-full justify-center">
+               <div className="bg-slate-900/90 p-4 rounded-xl shadow-md border border-amber-500/30 flex flex-col gap-3 backdrop-blur-sm">
+                 <div className="text-center border-b border-slate-700/50 pb-2">
+                   <p className="text-amber-400 font-bold uppercase tracking-wider text-xs">Kêu Gọi Giao Dịch</p>
+                   <p className="text-[9px] text-slate-400 mt-0.5">Phần thưởng: Cả 2 nhận +1 Điểm XH</p>
                  </div>
                  
-                 <div className="flex flex-col gap-4">
-                   <div>
-                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Đối Tác Nhận:</label>
-                     <select value={tradeState.partnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="w-full bg-slate-700 border border-slate-600 rounded-xl p-3 text-white text-sm outline-none focus:border-amber-500 transition-colors font-bold">
+                 <div className="flex flex-col gap-2">
+                   <div className="flex items-center gap-2">
+                     <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">Đối Tác:</label>
+                     <select value={tradeState.partnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="flex-1 bg-slate-950 border border-slate-700 rounded p-1.5 text-slate-200 text-xs outline-none focus:border-amber-500 transition-colors">
                         {Object.keys(G.players).filter(id => id !== ctx.currentPlayer).map(id => (
                           <option key={id} value={id}>P{parseInt(id)+1}: {G.players[id].faction}</option>
                         ))}
                      </select>
                    </div>
                    
-                     <div className="flex gap-3 relative">
-                       <div className="flex-1">
-                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Gói 1:</label>
-                         <select value={tradeState.offer} onChange={e => setTradeState({...tradeState, offer: e.target.value})} className={`w-full bg-slate-700 border ${isB2BShortage ? 'border-red-500' : 'border-slate-600'} rounded-xl p-3 text-white text-sm outline-none focus:border-amber-500 transition-colors font-bold`}>
-                           <option value="none">Trống</option>
-                           <option value="capital">Vốn 💰</option>
-                           <option value="labor">Lao động 👷</option>
-                           <option value="tech">Công nghệ 💻</option>
-                           <option value="policy">Chính sách 📜</option>
-                         </select>
-                       </div>
-                       <div className="flex-1">
-                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Gói 2:</label>
-                         <select value={tradeState.request} onChange={e => setTradeState({...tradeState, request: e.target.value})} className={`w-full bg-slate-700 border ${isB2BShortage ? 'border-red-500' : 'border-slate-600'} rounded-xl p-3 text-white text-sm outline-none focus:border-amber-500 transition-colors font-bold`}>
-                           <option value="none">Trống</option>
-                           <option value="capital">Vốn 💰</option>
-                           <option value="labor">Lao động 👷</option>
-                           <option value="tech">Công nghệ 💻</option>
-                           <option value="policy">Chính sách 📜</option>
-                         </select>
-                       </div>
+                   <div className="flex gap-2 relative">
+                     <div className="flex-1 flex flex-col gap-0.5">
+                       <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Đưa ra (Gói 1):</label>
+                       <select value={tradeState.offer} onChange={e => setTradeState({...tradeState, offer: e.target.value})} className={`w-full bg-slate-950 border ${isB2BShortage ? 'border-red-500/50' : 'border-slate-700'} rounded p-1.5 text-slate-200 text-xs outline-none focus:border-amber-500 transition-colors`}>
+                         <option value="none">Trống</option>
+                         <option value="capital">Vốn 💰</option>
+                         <option value="labor">Lao động 👷</option>
+                         <option value="tech">Công nghệ 💻</option>
+                         <option value="policy">Chính sách 📜</option>
+                       </select>
                      </div>
-                     {isB2BShortage && <p className="text-red-400 text-xs font-bold text-center mt-1 animate-pulse">⚠️ Không đủ tài nguyên!</p>}
+                     <div className="flex-1 flex flex-col gap-0.5">
+                       <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Đưa ra (Gói 2):</label>
+                       <select value={tradeState.request} onChange={e => setTradeState({...tradeState, request: e.target.value})} className={`w-full bg-slate-950 border ${isB2BShortage ? 'border-red-500/50' : 'border-slate-700'} rounded p-1.5 text-slate-200 text-xs outline-none focus:border-amber-500 transition-colors`}>
+                         <option value="none">Trống</option>
+                         <option value="capital">Vốn 💰</option>
+                         <option value="labor">Lao động 👷</option>
+                         <option value="tech">Công nghệ 💻</option>
+                         <option value="policy">Chính sách 📜</option>
+                       </select>
+                     </div>
+                   </div>
+                   {isB2BShortage && <p className="text-red-400 text-[10px] font-bold text-center mt-0.5 animate-pulse">⚠️ Không đủ tài nguyên!</p>}
                    
-                   <div className="mt-2">
-                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block text-center">Yêu Cầu (Điểm Tư Bản):</label>
-                     <input type="number" min="0" value={tradeState.price} onChange={e => setTradeState({...tradeState, price: parseInt(e.target.value) || 0})} className="w-full bg-slate-700 border border-slate-600 rounded-xl p-4 text-amber-400 font-black text-2xl text-center outline-none focus:border-amber-500 transition-colors" />
+                   <div className="mt-1 flex flex-col items-center">
+                     <label className="text-[9px] font-semibold text-slate-400 uppercase tracking-wider mb-1 text-center">Yêu Cầu (Tư Bản):</label>
+                     <div className="flex items-center gap-2">
+                       <button onClick={() => setTradeState({...tradeState, price: Math.max(0, tradeState.price - 1)})} className="w-6 h-6 rounded bg-slate-800 text-white hover:bg-slate-700">-</button>
+                       <span className="w-10 text-center font-bold text-amber-400 text-lg">{tradeState.price}</span>
+                       <button onClick={() => setTradeState({...tradeState, price: tradeState.price + 1})} className="w-6 h-6 rounded bg-slate-800 text-white hover:bg-slate-700">+</button>
+                     </div>
                    </div>
                  </div>
 
-                 <div className="flex flex-row gap-3 mt-6">
-                   <button onClick={() => moves.skipTrade()} className="flex-1 py-4 bg-slate-700 hover:bg-slate-600 text-slate-300 font-black uppercase tracking-widest text-xs rounded-xl border border-rose-500/50 hover:border-rose-500 transition-colors">Hủy Bỏ</button>
+                 <div className="flex flex-row gap-2 mt-2">
+                   <button onClick={() => moves.skipTrade()} className="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 font-bold uppercase text-[10px] rounded transition-colors border border-slate-700">Bỏ Qua</button>
                    <button disabled={isB2BShortage} onClick={() => {
                       const tokens = {};
                       if(tradeState.offer !== 'none') tokens[tradeState.offer] = (tokens[tradeState.offer] || 0) + 1;
@@ -471,7 +467,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                         type: 'executeTrade',
                         payload: { partnerId: tradeState.partnerId, tokens, price: tradeState.price }
                       });
-                   }} className="flex-[2] py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-slate-600 disabled:to-slate-700 disabled:text-slate-400 text-white font-black uppercase tracking-widest text-sm rounded-xl shadow-[0_10px_20px_rgba(16,185,129,0.4)] disabled:shadow-none border-b-4 border-teal-900 disabled:border-slate-800 active:border-b-0 active:translate-y-1 transition-all">KÝ KẾT</button>
+                   }} className="flex-[2] py-2 bg-gradient-to-r from-emerald-600/90 to-teal-600/90 hover:from-emerald-500 hover:to-teal-500 disabled:from-slate-700 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold uppercase text-[10px] rounded shadow-sm border border-emerald-500/50 disabled:border-slate-700 transition-all">Gửi Đề Nghị</button>
                  </div>
                </div>
              </div>
@@ -544,15 +540,15 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                   moves.upgradeRing(); 
                   showAlert('Nâng Cấp Vòng thành công! Bạn đã tiến sâu hơn vào thị trường.'); 
                 }} 
-                className="w-full p-5 bg-gradient-to-r from-cyan-800 to-cyan-900 hover:from-cyan-700 hover:to-cyan-800 disabled:from-slate-800 disabled:to-slate-900 text-cyan-100 disabled:text-slate-500 rounded-2xl shadow-xl border border-cyan-700/50 hover:border-cyan-400 disabled:border-slate-800 transition-all text-left group"
+                className="w-full p-3 bg-gradient-to-r from-cyan-900/80 to-slate-900 hover:from-cyan-800 hover:to-slate-800 disabled:from-slate-900 disabled:to-slate-950 text-cyan-100 disabled:text-slate-500 rounded-xl shadow-md border border-cyan-700/30 hover:border-cyan-500/50 disabled:border-slate-800 transition-all text-left group backdrop-blur-sm"
               >
-                 <div className="flex items-center gap-4">
-                   <div className="bg-cyan-950/80 p-3 rounded-xl border border-cyan-800 group-hover:scale-110 transition-transform"><span className="text-2xl">🚀</span></div>
+                 <div className="flex items-center gap-3">
+                   <div className="bg-cyan-950 p-2 rounded-lg border border-cyan-800/50 group-hover:scale-110 transition-transform"><span className="text-xl">🚀</span></div>
                    <div className="flex-1">
-                     <h3 className="font-black uppercase tracking-widest text-lg">HỘI NHẬP LÊN VÒNG 2 (ASEAN)</h3>
-                     <p className="text-[10px] text-cyan-400/80 font-bold uppercase mt-1">Chi phí: 5 Điểm Tư bản 📈 + 2 Token Chính sách 📜</p>
-                     {isBanned && <p className="text-xs font-black text-red-400 uppercase mt-1 animate-pulse">Đang bị cấm nâng cấp</p>}
-                     {!canUpgradeV2 && !isBanned && <p className="text-xs font-black text-rose-400 uppercase mt-1">Thiếu điều kiện hội nhập</p>}
+                     <h3 className="font-bold uppercase tracking-wider text-sm">Hội Nhập Lên Vòng 2 (ASEAN)</h3>
+                     <p className="text-[9px] text-cyan-400/80 font-semibold uppercase mt-0.5">Chi phí: 5 Tư bản 📈 + 2 Chính sách 📜</p>
+                     {isBanned && <p className="text-[10px] font-bold text-red-400 uppercase mt-0.5 animate-pulse">Đang bị cấm nâng cấp</p>}
+                     {!canUpgradeV2 && !isBanned && <p className="text-[10px] font-bold text-rose-400 uppercase mt-0.5">Thiếu điều kiện hội nhập</p>}
                    </div>
                  </div>
               </button>
@@ -565,25 +561,25 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                   moves.upgradeRing(); 
                   showAlert('Nâng Cấp Vòng thành công! Bạn đã tiến sâu hơn vào thị trường.'); 
                 }} 
-                className="w-full p-5 bg-gradient-to-r from-cyan-800 to-cyan-900 hover:from-cyan-700 hover:to-cyan-800 disabled:from-slate-800 disabled:to-slate-900 text-cyan-100 disabled:text-slate-500 rounded-2xl shadow-xl border border-cyan-700/50 hover:border-cyan-400 disabled:border-slate-800 transition-all text-left group"
+                className="w-full p-3 bg-gradient-to-r from-cyan-900/80 to-slate-900 hover:from-cyan-800 hover:to-slate-800 disabled:from-slate-900 disabled:to-slate-950 text-cyan-100 disabled:text-slate-500 rounded-xl shadow-md border border-cyan-700/30 hover:border-cyan-500/50 disabled:border-slate-800 transition-all text-left group backdrop-blur-sm"
               >
-                 <div className="flex items-center gap-4">
-                   <div className="bg-cyan-950/80 p-3 rounded-xl border border-cyan-800 group-hover:scale-110 transition-transform"><span className="text-2xl">🚀</span></div>
+                 <div className="flex items-center gap-3">
+                   <div className="bg-cyan-950 p-2 rounded-lg border border-cyan-800/50 group-hover:scale-110 transition-transform"><span className="text-xl">🚀</span></div>
                    <div className="flex-1">
-                     <h3 className="font-black uppercase tracking-widest text-lg">HỘI NHẬP LÊN VÒNG 3 (TOÀN CẦU)</h3>
-                     <p className="text-[10px] text-cyan-400/80 font-bold uppercase mt-1">Chi phí: 10 Điểm Tư bản 📈 + 3 Token Chính sách 📜</p>
-                     {isBanned && <p className="text-xs font-black text-red-400 uppercase mt-1 animate-pulse">Đang bị cấm nâng cấp</p>}
-                     {!canUpgradeV3 && !isBanned && <p className="text-xs font-black text-rose-400 uppercase mt-1">Thiếu điều kiện hội nhập</p>}
+                     <h3 className="font-bold uppercase tracking-wider text-sm">Hội Nhập Lên Vòng 3 (Toàn Cầu)</h3>
+                     <p className="text-[9px] text-cyan-400/80 font-semibold uppercase mt-0.5">Chi phí: 10 Tư bản 📈 + 3 Chính sách 📜</p>
+                     {isBanned && <p className="text-[10px] font-bold text-red-400 uppercase mt-0.5 animate-pulse">Đang bị cấm nâng cấp</p>}
+                     {!canUpgradeV3 && !isBanned && <p className="text-[10px] font-bold text-rose-400 uppercase mt-0.5">Thiếu điều kiện hội nhập</p>}
                    </div>
                  </div>
               </button>
             )}
 
             {p.ring === 3 && (
-              <div className="w-full p-5 bg-slate-800 rounded-2xl shadow-xl border border-amber-500/50 text-center flex items-center justify-center gap-3">
-                 <span className="text-2xl animate-pulse">🌟</span>
-                 <h3 className="font-black uppercase tracking-widest text-amber-400">BẠN ĐANG Ở THỊ TRƯỜNG TOÀN CẦU</h3>
-                 <span className="text-2xl animate-pulse">🌟</span>
+              <div className="w-full p-3 bg-slate-900/80 rounded-xl shadow-md border border-amber-500/30 text-center flex items-center justify-center gap-2 backdrop-blur-sm">
+                 <span className="text-lg animate-pulse">🌟</span>
+                 <h3 className="font-bold uppercase tracking-wider text-amber-400 text-sm">Đã vào Thị Trường Toàn Cầu</h3>
+                 <span className="text-lg animate-pulse">🌟</span>
               </div>
             )}
             
@@ -593,34 +589,34 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                 moves.buySocialPoints(); 
                 showAlert('Mua Điểm Xã Hội thành công! Uy tín của bạn đã tăng lên.'); 
               }} 
-              className="w-full p-5 bg-gradient-to-r from-pink-800 to-pink-900 hover:from-pink-700 hover:to-pink-800 disabled:from-slate-800 disabled:to-slate-900 text-pink-100 disabled:text-slate-500 rounded-2xl shadow-xl border border-pink-700/50 hover:border-pink-400 disabled:border-slate-800 transition-all text-left group"
+              className="w-full p-3 bg-gradient-to-r from-pink-900/80 to-slate-900 hover:from-pink-800 hover:to-slate-800 disabled:from-slate-900 disabled:to-slate-950 text-pink-100 disabled:text-slate-500 rounded-xl shadow-md border border-pink-700/30 hover:border-pink-500/50 disabled:border-slate-800 transition-all text-left group backdrop-blur-sm"
             >
-               <div className="flex items-center gap-4">
-                 <div className="bg-pink-950/80 p-3 rounded-xl border border-pink-800 group-hover:scale-110 transition-transform"><span className="text-2xl">❤️</span></div>
+               <div className="flex items-center gap-3">
+                 <div className="bg-pink-950 p-2 rounded-lg border border-pink-800/50 group-hover:scale-110 transition-transform"><span className="text-xl">❤️</span></div>
                  <div>
-                   <h3 className="font-black uppercase tracking-widest text-lg">Mua Điểm Xã Hội</h3>
-                   <p className="text-[10px] text-pink-400/80 font-bold uppercase mt-1">Chi phí: {p.faction === 'Khối FDI' ? '4' : '3'} Điểm Tư bản 📈</p>
-                   {p.capitalPoints < (p.faction === 'Khối FDI' ? 4 : 3) && <p className="text-xs font-black text-slate-400 uppercase mt-1">Thiếu Điểm Tư Bản</p>}
+                   <h3 className="font-bold uppercase tracking-wider text-sm">Mua Điểm Xã Hội</h3>
+                   <p className="text-[9px] text-pink-400/80 font-semibold uppercase mt-0.5">Chi phí: {p.faction === 'Khối FDI' ? '4' : '3'} Tư bản 📈</p>
+                   {p.capitalPoints < (p.faction === 'Khối FDI' ? 4 : 3) && <p className="text-[10px] font-bold text-slate-500 uppercase mt-0.5">Thiếu Điểm Tư Bản</p>}
                  </div>
                </div>
             </button>
 
             {!tradeForm ? (
-               <button onClick={() => setTradeForm(true)} className="w-full p-6 bg-slate-800 hover:bg-slate-700 text-white rounded-3xl shadow-[0_10px_20px_rgba(0,0,0,0.4)] border-2 border-amber-600/50 hover:border-amber-500 transition-all flex flex-col items-center gap-2 group relative overflow-hidden">
-                 <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                 <span className="text-4xl group-hover:scale-110 transition-transform">🤝</span>
-                 <span className="font-black text-xl uppercase tracking-widest text-amber-500">Liên Doanh</span>
+               <button onClick={() => setTradeForm(true)} className="w-full p-3 bg-slate-900/80 hover:bg-slate-800 text-slate-300 rounded-xl shadow-md border border-amber-600/30 hover:border-amber-500/60 transition-all flex items-center justify-center gap-2 group relative overflow-hidden backdrop-blur-sm">
+                 <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                 <span className="text-xl group-hover:scale-110 transition-transform">🤝</span>
+                 <span className="font-bold text-sm uppercase tracking-wider text-amber-500">Liên Doanh / Giao Dịch</span>
                </button>
             ) : (
-               <div className="w-full p-5 bg-slate-900/90 rounded-2xl shadow-xl border border-amber-500/50 flex flex-col gap-4 animate-fade-in">
-                 <div className="text-center border-b border-slate-700 pb-2">
-                   <h3 className="font-black uppercase tracking-widest text-amber-400">Liên Doanh Giao Dịch</h3>
-                   <p className="text-[10px] text-slate-400 mt-1">Đổi 1 Token lấy 1 Token. HTX có quyền lợi thêm.</p>
+               <div className="w-full p-3 bg-slate-900/90 rounded-xl shadow-md border border-amber-500/30 flex flex-col gap-2 animate-fade-in backdrop-blur-sm">
+                 <div className="text-center border-b border-slate-700/50 pb-1">
+                   <h3 className="font-bold uppercase tracking-wider text-amber-400 text-xs">Liên Doanh Giao Dịch</h3>
+                   <p className="text-[9px] text-slate-400 mt-0.5">Đổi 1 Token lấy 1 Token. HTX có quyền lợi thêm.</p>
                  </div>
                  
-                 <div>
-                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Đối Tác:</label>
-                   <select value={currentPartnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="w-full bg-slate-950 border border-slate-600 rounded p-2 text-white text-sm outline-none focus:border-amber-500">
+                 <div className="flex items-center gap-2">
+                   <label className="text-[9px] font-semibold text-slate-400 uppercase whitespace-nowrap">Đối Tác:</label>
+                   <select value={currentPartnerId} onChange={e => setTradeState({...tradeState, partnerId: e.target.value})} className="flex-1 bg-slate-950 border border-slate-700 rounded p-1 text-slate-200 text-xs outline-none focus:border-amber-500">
                      {availablePartners.map(id => (
                        <option key={id} value={id}>P{parseInt(id)+1}: {G.players[id].faction}</option>
                      ))}
@@ -628,18 +624,18 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                  </div>
                  
                  <div className="flex gap-2">
-                   <div className="flex-1">
-                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Đưa ra:</label>
-                     <select value={tradeState.offer} onChange={e => setTradeState({...tradeState, offer: e.target.value})} className={`w-full bg-slate-950 border ${isGenericShortage ? 'border-red-500' : 'border-slate-600'} rounded p-2 text-white text-sm outline-none focus:border-amber-500`}>
+                   <div className="flex-1 flex flex-col gap-0.5">
+                     <label className="text-[9px] font-semibold text-slate-400 uppercase">Đưa ra:</label>
+                     <select value={tradeState.offer} onChange={e => setTradeState({...tradeState, offer: e.target.value})} className={`w-full bg-slate-950 border ${isGenericShortage ? 'border-red-500/50' : 'border-slate-700'} rounded p-1 text-slate-200 text-xs outline-none focus:border-amber-500`}>
                        <option value="capital">1 Vốn</option>
                        <option value="labor">1 Lao động</option>
                        <option value="tech">1 Công nghệ</option>
                        <option value="policy">1 Chính sách</option>
                      </select>
                    </div>
-                   <div className="flex-1">
-                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Yêu cầu:</label>
-                     <select value={tradeState.request} onChange={e => setTradeState({...tradeState, request: e.target.value})} className="w-full bg-slate-950 border border-slate-600 rounded p-2 text-white text-sm outline-none focus:border-amber-500">
+                   <div className="flex-1 flex flex-col gap-0.5">
+                     <label className="text-[9px] font-semibold text-slate-400 uppercase">Yêu cầu:</label>
+                     <select value={tradeState.request} onChange={e => setTradeState({...tradeState, request: e.target.value})} className="w-full bg-slate-950 border border-slate-700 rounded p-1 text-slate-200 text-xs outline-none focus:border-amber-500">
                        <option value="capital">1 Vốn</option>
                        <option value="labor">1 Lao động</option>
                        <option value="tech">1 Công nghệ</option>
@@ -648,24 +644,24 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                    </div>
                  </div>
                  
-                 {isGenericShortage && <p className="text-red-400 text-xs font-bold text-center animate-pulse">⚠️ Không đủ tài nguyên!</p>}
+                 {isGenericShortage && <p className="text-red-400 text-[10px] font-bold text-center mt-0.5 animate-pulse">⚠️ Không đủ tài nguyên!</p>}
 
-                 <div className="flex gap-2 mt-2">
-                   <button onClick={() => setTradeForm(false)} className="flex-1 py-3 bg-slate-700 text-slate-300 font-black uppercase text-xs rounded-xl hover:bg-slate-600 transition-colors">Hủy</button>
+                 <div className="flex gap-2 mt-1">
+                   <button onClick={() => setTradeForm(false)} className="flex-1 py-1.5 bg-slate-800 text-slate-400 font-semibold uppercase text-[10px] rounded hover:bg-slate-700 transition-colors">Hủy</button>
                    <button disabled={isGenericShortage} onClick={() => {
                       setPendingConfirmation({
                         type: 'trade',
                         payload: { partnerId: currentPartnerId, offer: { [currentOffer]: 1 }, request: { [tradeState.request]: 1 } }
                       });
                       setTradeForm(false);
-                   }} className="flex-1 py-3 bg-amber-600 text-white font-black uppercase text-xs rounded-xl shadow-lg border-b-4 border-amber-900 active:border-b-0 active:translate-y-1 disabled:opacity-50 disabled:border-slate-700 disabled:shadow-none hover:bg-amber-500 transition-all">Thỏa Thuận</button>
+                   }} className="flex-1 py-1.5 bg-amber-600/90 text-white font-semibold uppercase text-[10px] rounded shadow-sm disabled:opacity-50 disabled:bg-slate-700 hover:bg-amber-500 transition-colors">Gửi Lời Mời</button>
                  </div>
                </div>
             )}
 
-            <div className="mt-4">
-               <button onClick={() => moves.endTurn()} className="w-full py-5 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-slate-200 rounded-2xl shadow-xl border border-slate-600 hover:border-slate-400 transition-all font-black text-xl uppercase tracking-[0.2em] text-center border-b-4 border-black active:border-b-0 active:translate-y-1">
-                 🛑 Qua Lượt
+            <div className="mt-1">
+               <button onClick={() => moves.endTurn()} className="w-full py-3 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 text-slate-300 rounded-xl shadow-md border border-slate-700 hover:border-slate-500 transition-all font-bold text-sm uppercase tracking-widest text-center">
+                 🛑 KẾT THÚC LƯỢT
                </button>
             </div>
           </div>

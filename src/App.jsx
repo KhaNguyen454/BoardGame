@@ -102,11 +102,11 @@ const BoardWrapper = (props) => {
            <GameBoard G={props.G} ctx={ctx} />
            
            {/* Khung Hướng Dẫn overlays GameBoard */}
-           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[60%] max-w-lg flex-shrink-0 bg-slate-900/95 p-1.5 rounded-lg border border-amber-500 shadow-[0_5px_15px_rgba(0,0,0,0.8)] backdrop-blur-md z-10 text-center">
+           {/* <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[60%] max-w-lg flex-shrink-0 bg-slate-900/95 p-1.5 rounded-lg border border-amber-500 shadow-[0_5px_15px_rgba(0,0,0,0.8)] backdrop-blur-md z-10 text-center">
              <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse"></div>
              <h3 className="text-amber-400 font-black uppercase tracking-widest text-[8px] mb-0.5">CHỈ THỊ HIỆN TẠI:</h3>
              <p className="text-white font-bold text-[10px] lg:text-xs animate-fade-in uppercase tracking-wide leading-tight">{getInstruction()}</p>
-           </div>
+           </div> */}
          </div>
       </div>
 
