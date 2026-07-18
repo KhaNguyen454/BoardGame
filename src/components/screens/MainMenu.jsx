@@ -2,7 +2,7 @@ import React from 'react';
 
 export const MainMenu = ({ onStart }) => {
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-slate-950 font-sans text-slate-100 relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-neutral-950 font-sans text-slate-100 relative overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-neutral-950 to-black">
       <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-slate-950/90 pointer-events-none"></div>
       
       <div className="z-10 flex flex-col items-center gap-8">

@@ -9,9 +9,9 @@ const FACTION_COLORS = {
 
 export const Sidebar = ({ G, ctx }) => {
   return (
-    <div className="w-[22vw] min-w-[260px] max-w-[320px] flex-shrink-0 h-full bg-slate-900/80 backdrop-blur-xl border-r border-slate-700 shadow-2xl flex flex-col overflow-hidden p-2 gap-2">
-      <div className="text-center py-1">
-        <h2 className="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200 tracking-widest uppercase drop-shadow-lg">
+    <div className="w-full h-full flex flex-col overflow-hidden gap-2">
+      <div className="text-center py-1 bg-amber-900/50 rounded-lg border border-amber-700/50">
+        <h2 className="text-lg md:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-400 tracking-[0.2em] uppercase drop-shadow-md">
           Bảng Theo Dõi
         </h2>
       </div>
@@ -22,52 +22,56 @@ export const Sidebar = ({ G, ctx }) => {
          const colorClass = FACTION_COLORS[player.faction] || 'from-gray-800 to-gray-700 border-gray-500';
          
          return (
-           <div key={id} className={`p-2.5 flex-1 min-h-0 flex flex-col justify-between rounded-xl border-2 bg-gradient-to-br ${colorClass} transition-all duration-300 ${isCurrentTurn ? 'scale-[1.02] shadow-[0_0_20px_rgba(251,191,36,0.6)] border-amber-400 ring-2 ring-amber-300/50 animate-pulse' : 'opacity-80 hover:opacity-100'} overflow-hidden`}>
-             <div className="flex justify-between items-center mb-1">
-               <div className="flex-1">
-                 <h3 className="font-black text-white text-base md:text-lg drop-shadow-md tracking-wide leading-none truncate">P{parseInt(id)+1}: {player.name || `Người chơi ${parseInt(id)+1}`}</h3>
-                 <p className="text-[9px] md:text-[10px] text-gray-300 font-bold uppercase tracking-wider mt-0.5 truncate">{player.faction}</p>
+           <div key={id} className={`p-2 flex-1 min-h-0 flex flex-col justify-between rounded-xl border-2 bg-gradient-to-br ${colorClass} transition-all duration-300 ${isCurrentTurn ? 'scale-[1.02] shadow-[0_0_20px_rgba(251,191,36,0.6)] border-amber-400 ring-2 ring-amber-300/50 animate-pulse' : 'opacity-80 hover:opacity-100'} overflow-hidden`}>
+             <div className="flex flex-col mb-1 gap-1">
+               <div className="flex justify-between items-start">
+                 <h3 className="font-black text-white text-sm md:text-base drop-shadow-md tracking-wide leading-none truncate">{player.name || `Người chơi ${parseInt(id)+1}`}</h3>
+                 <span className="text-[9px] font-black px-1.5 py-0.5 bg-black/40 text-amber-300 rounded shadow-inner border border-white/10 uppercase whitespace-nowrap">
+                   Vòng {player.ring}
+                 </span>
                </div>
-               <span className="text-xs font-black px-3 py-1 bg-black/40 text-amber-300 rounded-lg shadow-inner border border-white/10 uppercase tracking-widest">
-                 Vòng {player.ring}
-               </span>
+               <p className="text-[9px] text-gray-300 font-bold uppercase tracking-wider truncate leading-none">{player.faction}</p>
              </div>
              
              {/* Progress Bars */}
-             <div className="space-y-1.5 mb-1.5 mt-auto">
+             <div className="space-y-1 mb-1">
                <div>
-                 <div className="flex justify-between text-[9px] font-black text-gray-300 mb-0.5 uppercase tracking-widest">
+                 <div className="flex justify-between text-[9px] font-black text-gray-300 mb-0.5 uppercase tracking-widest leading-none">
                    <span>Tư bản</span>
                    <span>{player.capitalPoints} / 20</span>
                  </div>
-                 <div className="w-full bg-black/50 rounded-full h-2.5 shadow-inner border border-white/5 overflow-hidden">
-                   <div className="bg-gradient-to-r from-yellow-500 to-amber-300 h-2.5 rounded-full shadow-[0_0_10px_rgba(251,191,36,0.8)]" style={{ width: `${Math.min((player.capitalPoints/20)*100, 100)}%` }}></div>
+                 <div className="w-full bg-black/50 rounded-full h-2 shadow-inner border border-white/5 overflow-hidden">
+                   <div className="bg-gradient-to-r from-yellow-500 to-amber-300 h-full rounded-full shadow-[0_0_10px_rgba(251,191,36,0.8)]" style={{ width: `${Math.min((player.capitalPoints/20)*100, 100)}%` }}></div>
                  </div>
                </div>
                <div>
-                 <div className="flex justify-between text-[9px] font-black text-gray-300 mb-0.5 uppercase tracking-widest">
+                 <div className="flex justify-between text-[9px] font-black text-gray-300 mb-0.5 uppercase tracking-widest leading-none">
                    <span>Xã hội</span>
                    <span>{player.socialPoints} / 10</span>
                  </div>
-                 <div className="w-full bg-black/50 rounded-full h-2.5 shadow-inner border border-white/5 overflow-hidden">
-                   <div className="bg-gradient-to-r from-emerald-500 to-green-300 h-2.5 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.8)]" style={{ width: `${Math.min((player.socialPoints/10)*100, 100)}%` }}></div>
+                 <div className="w-full bg-black/50 rounded-full h-2 shadow-inner border border-white/5 overflow-hidden">
+                   <div className="bg-gradient-to-r from-emerald-500 to-green-300 h-full rounded-full shadow-[0_0_10px_rgba(52,211,153,0.8)]" style={{ width: `${Math.min((player.socialPoints/10)*100, 100)}%` }}></div>
                  </div>
                </div>
              </div>
 
              {/* Tokens Badges */}
-             <div className="grid grid-cols-4 gap-1 mt-1">
-               <div className="bg-black/40 py-1 px-0.5 rounded-lg border border-white/10 flex items-center justify-center gap-0.5 backdrop-blur-sm" title="Vốn">
-                 <span className="text-[10px]">💰</span><span className="font-black text-white text-[10px]">{player.resources.capital}</span>
+             <div className="grid grid-cols-4 gap-1 mt-auto">
+               <div className="bg-black/40 py-1 px-0.5 rounded border border-white/10 flex flex-col items-center justify-center gap-0.5 backdrop-blur-sm shadow-inner" title="Vốn">
+                 <span className="text-sm drop-shadow-md leading-none">💰</span>
+                 <span className="font-black text-white text-xs drop-shadow-md leading-none">{player.resources.capital}</span>
                </div>
-               <div className="bg-black/40 py-1 px-0.5 rounded-lg border border-white/10 flex items-center justify-center gap-0.5 backdrop-blur-sm" title="Lao động">
-                 <span className="text-[10px]">👷</span><span className="font-black text-white text-[10px]">{player.resources.labor}</span>
+               <div className="bg-black/40 py-1 px-0.5 rounded border border-white/10 flex flex-col items-center justify-center gap-0.5 backdrop-blur-sm shadow-inner" title="Lao động">
+                 <span className="text-sm drop-shadow-md leading-none">👷</span>
+                 <span className="font-black text-white text-xs drop-shadow-md leading-none">{player.resources.labor}</span>
                </div>
-               <div className="bg-black/40 py-1 px-0.5 rounded-lg border border-white/10 flex items-center justify-center gap-0.5 backdrop-blur-sm" title="Công nghệ">
-                 <span className="text-[10px]">💻</span><span className="font-black text-white text-[10px]">{player.resources.tech}</span>
+               <div className="bg-black/40 py-1 px-0.5 rounded border border-white/10 flex flex-col items-center justify-center gap-0.5 backdrop-blur-sm shadow-inner" title="Công nghệ">
+                 <span className="text-sm drop-shadow-md leading-none">💻</span>
+                 <span className="font-black text-white text-xs drop-shadow-md leading-none">{player.resources.tech}</span>
                </div>
-               <div className="bg-black/40 py-1 px-0.5 rounded-lg border border-white/10 flex items-center justify-center gap-0.5 backdrop-blur-sm" title="Chính sách">
-                 <span className="text-[10px]">📜</span><span className="font-black text-white text-[10px]">{player.resources.policy}</span>
+               <div className="bg-black/40 py-1 px-0.5 rounded border border-white/10 flex flex-col items-center justify-center gap-0.5 backdrop-blur-sm shadow-inner" title="Chính sách">
+                 <span className="text-sm drop-shadow-md leading-none">📜</span>
+                 <span className="font-black text-white text-xs drop-shadow-md leading-none">{player.resources.policy}</span>
                </div>
              </div>
            </div>
