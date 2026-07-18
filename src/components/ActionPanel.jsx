@@ -2,31 +2,31 @@ import React, { useState, useEffect } from 'react';
 
 // --- Hỗ trợ bóc tách thông số Thẻ bài ---
 const getCardBadges = (card) => {
+  if (!card) return [];
   const badges = [];
   if (card.isBoss) badges.push('💀 BOSS ĐỘC QUYỀN');
-  else if (card.type?.includes('reward')) badges.push('🌟 CƠ HỘI');
-  else if (card.type?.includes('penalty')) badges.push('⚠️ RỦI RO');
-  else if (card.type?.includes('trade')) badges.push('🤝 TƯƠNG TÁC');
+  else if (card?.type?.includes('reward')) badges.push('🌟 CƠ HỘI');
+  else if (card?.type?.includes('penalty')) badges.push('⚠️ RỦI RO');
+  else if (card?.type?.includes('trade')) badges.push('🤝 TƯƠNG TÁC');
 
   if (card.amount) {
-    if (card.type?.includes('capital') || card.effect?.includes('capital')) badges.push(`📈 C.Points ${card.amount}`);
-    if (card.type?.includes('social') || card.effect?.includes('social')) badges.push(`🌱 S.Points ${card.amount}`);
-    if (card.type?.includes('tech')) badges.push(`💻 Tech ${card.amount}`);
-    if (card.effect === 'minus_labor') badges.push(`👷 Labor -${card.amount}`);
+    if (card?.type?.includes('capital') || card?.effect?.includes('capital')) badges.push(`📈 C.Points ${card.amount}`);
+    if (card?.type?.includes('social') || card?.effect?.includes('social')) badges.push(`🌱 S.Points ${card.amount}`);
+    if (card?.type?.includes('tech')) badges.push(`💻 Tech ${card.amount}`);
+    if (card?.effect === 'minus_labor') badges.push(`👷 Labor -${card.amount}`);
   }
   if (card.capitalAmount) badges.push(`📈 C.Points ${card.capitalAmount}`);
   if (card.laborAmount) badges.push(`👷 Labor ${card.laborAmount}`);
-  if (card.effect === 'lose_turn' || card.type?.includes('ban')) badges.push('⛔ Bỏ Lượt / Cấm');
+  if (card?.effect === 'lose_turn' || card?.type?.includes('ban')) badges.push('⛔ Bỏ Lượt / Cấm');
   return badges;
 };
 
-// --- Component Xúc xắc CSS ---
-const DiceFace = ({ value, rolling }) => {
+const DiceFace = ({ value, rolling, small }) => {
   const dots = Array(value).fill(0);
   return (
-    <div className={`w-24 h-24 bg-indigo-900 border-4 border-indigo-500 rounded-2xl flex flex-wrap p-4 gap-2 justify-center content-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] ${rolling ? 'animate-spin' : ''}`}>
+    <div className={`${small ? 'w-12 h-12 border-2 p-2 gap-1 rounded-xl' : 'w-24 h-24 border-4 p-4 gap-2 rounded-2xl'} bg-indigo-900 border-indigo-500 flex flex-wrap justify-center content-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)] ${rolling ? 'animate-spin' : ''}`}>
       {dots.map((_, i) => (
-        <div key={i} className="w-4 h-4 bg-white rounded-full shadow-[0_0_5px_rgba(255,255,255,0.8)]"></div>
+        <div key={i} className={`${small ? 'w-2 h-2' : 'w-4 h-4'} bg-white rounded-full shadow-[0_0_5px_rgba(255,255,255,0.8)]`}></div>
       ))}
     </div>
   );
@@ -43,6 +43,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
   const [tradeState, setTradeState] = useState({ partnerId: '0', offer: 'none', request: 'none', price: 1, rewardToken: 'tech' });
   const [pendingConfirmation, setPendingConfirmation] = useState(null);
   const [customAlert, setCustomAlert] = useState(null);
+  const [selectedBonus, setSelectedBonus] = useState({ capital: 0, labor: 0, tech: 0, policy: 0 });
   const [isRolling, setIsRolling] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isAnimatingDraw, setIsAnimatingDraw] = useState(false);
@@ -112,26 +113,98 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
     switch (currentStage) {
       case 'rollDice':
         return (
-          <div className="flex flex-col gap-8 h-full justify-center text-center">
+          <div className={`flex flex-col h-full justify-center text-center ${G.pendingBonusTokens > 0 ? 'gap-2' : 'gap-8'}`}>
             {G.lastRoll ? (
-              <div className="flex flex-col items-center gap-6 animate-fade-in">
-                <div className="flex justify-center gap-6 drop-shadow-[0_0_15px_rgba(79,70,229,0.5)]">
-                  <DiceFace value={G.lastRoll.d1} rolling={false} />
-                  <DiceFace value={G.lastRoll.d2} rolling={false} />
+              <div className={`flex flex-col items-center animate-fade-in w-full ${G.pendingBonusTokens > 0 ? 'gap-2' : 'gap-6'}`}>
+                <div className={`flex justify-center drop-shadow-[0_0_15px_rgba(79,70,229,0.5)] ${G.pendingBonusTokens > 0 ? 'gap-2' : 'gap-6'}`}>
+                  <DiceFace value={G.lastRoll.d1} rolling={false} small={G.pendingBonusTokens > 0} />
+                  <DiceFace value={G.lastRoll.d2} rolling={false} small={G.pendingBonusTokens > 0} />
                 </div>
-                <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 w-full shadow-lg">
-                  <h3 className="font-black text-indigo-400 uppercase tracking-widest mb-4">Bạn nhận được:</h3>
+                <div className={`bg-slate-800 rounded-2xl border border-slate-700 w-full shadow-lg ${G.pendingBonusTokens > 0 ? 'p-3' : 'p-6'}`}>
+                  <h3 className={`font-black text-indigo-400 uppercase tracking-widest ${G.pendingBonusTokens > 0 ? 'mb-2 text-sm' : 'mb-4'}`}>Nhận được từ tổng {G.lastRoll.sum}:</h3>
                   <div className="flex justify-center gap-4">
-                    {G.lastRoll.resourcesAdded.capital > 0 && <span className="font-bold text-xl">💰 +{G.lastRoll.resourcesAdded.capital}</span>}
-                    {G.lastRoll.resourcesAdded.labor > 0 && <span className="font-bold text-xl">👷 +{G.lastRoll.resourcesAdded.labor}</span>}
-                    {G.lastRoll.resourcesAdded.tech > 0 && <span className="font-bold text-xl">💻 +{G.lastRoll.resourcesAdded.tech}</span>}
-                    {G.lastRoll.resourcesAdded.policy > 0 && <span className="font-bold text-xl">📜 +{G.lastRoll.resourcesAdded.policy}</span>}
-                    {Object.values(G.lastRoll.resourcesAdded).every(v => v === 0) && <span className="font-bold text-xl text-slate-400">Không có tài nguyên</span>}
+                    {G.lastRoll.resourcesAdded.capital > 0 && <span className="font-bold text-lg md:text-xl">💰 +{G.lastRoll.resourcesAdded.capital}</span>}
+                    {G.lastRoll.resourcesAdded.labor > 0 && <span className="font-bold text-lg md:text-xl">👷 +{G.lastRoll.resourcesAdded.labor}</span>}
+                    {G.lastRoll.resourcesAdded.tech > 0 && <span className="font-bold text-lg md:text-xl">💻 +{G.lastRoll.resourcesAdded.tech}</span>}
+                    {G.lastRoll.resourcesAdded.policy > 0 && <span className="font-bold text-lg md:text-xl">📜 +{G.lastRoll.resourcesAdded.policy}</span>}
+                    {Object.values(G.lastRoll.resourcesAdded).every(v => v === 0) && <span className="font-bold text-lg md:text-xl text-amber-400">✨ Xúc xắc may mắn ✨</span>}
                   </div>
                 </div>
-                <button onClick={() => moves.confirmRoll()} className="w-full py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl shadow-[0_10px_20px_rgba(16,185,129,0.4)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all">
-                  <span className="font-black text-2xl uppercase tracking-[0.2em]">TIẾP TỤC</span>
-                </button>
+
+                {G.pendingBonusTokens > 0 ? (
+                  <div className="w-full bg-slate-900 border border-amber-500/50 rounded-2xl p-3 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+                    <p className="text-base md:text-lg font-black text-amber-400 mb-3 uppercase tracking-widest">
+                      🎁 CHỌN TÀI NGUYÊN THƯỞNG
+                    </p>
+                    
+                    {(() => {
+                       const totalSelected = Object.values(selectedBonus).reduce((a, b) => a + b, 0);
+                       const remaining = G.pendingBonusTokens - totalSelected;
+                       
+                       const handleModify = (res, delta) => {
+                         if (delta > 0 && remaining === 0) return;
+                         if (delta < 0 && selectedBonus[res] === 0) return;
+                         setSelectedBonus(prev => ({ ...prev, [res]: prev[res] + delta }));
+                       };
+
+                       const confirmBonus = () => {
+                         moves.claimBonusTokens(selectedBonus);
+                         setSelectedBonus({ capital: 0, labor: 0, tech: 0, policy: 0 });
+                       };
+
+                       return (
+                         <div className="flex flex-col gap-4">
+                           <div className="grid grid-cols-2 gap-2">
+                             {[
+                               { id: 'capital', icon: '💰', label: 'Tư bản' },
+                               { id: 'labor', icon: '👷', label: 'L.Động' },
+                               { id: 'tech', icon: '💻', label: 'C.Nghệ' },
+                               { id: 'policy', icon: '📜', label: 'C.Sách' }
+                             ].map(res => (
+                               <div key={res.id} className="bg-slate-800 border border-slate-700 rounded-lg p-2 flex flex-col items-center gap-1">
+                                 <span className="text-xl md:text-2xl">{res.icon}</span>
+                                 <span className="text-[9px] md:text-[10px] uppercase font-bold text-slate-400 truncate w-full text-center">{res.label}</span>
+                                 <div className="flex justify-center items-center gap-1 mt-1">
+                                   <button 
+                                     disabled={selectedBonus[res.id] === 0} 
+                                     onClick={() => handleModify(res.id, -1)} 
+                                     className="w-6 h-6 rounded-full bg-slate-700 hover:bg-slate-600 disabled:opacity-30 font-bold text-white transition-all flex items-center justify-center text-sm"
+                                   >
+                                     -
+                                   </button>
+                                   <span className="font-black text-sm md:text-base w-4 text-center">{selectedBonus[res.id]}</span>
+                                   <button 
+                                     disabled={remaining === 0} 
+                                     onClick={() => handleModify(res.id, 1)} 
+                                     className="w-6 h-6 rounded-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 font-bold text-white shadow-lg transition-all flex items-center justify-center text-sm"
+                                   >
+                                     +
+                                   </button>
+                                 </div>
+                               </div>
+                             ))}
+                           </div>
+                           
+                           <button 
+                             disabled={remaining > 0} 
+                             onClick={confirmBonus} 
+                             className="w-full py-3 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 disabled:from-slate-800 disabled:to-slate-900 disabled:text-slate-500 disabled:border-slate-800 text-white rounded-xl shadow-[0_10px_20px_rgba(245,158,11,0.4)] disabled:shadow-none border-b-4 border-yellow-900 disabled:cursor-not-allowed active:border-b-0 active:translate-y-1 transition-all"
+                           >
+                             {remaining > 0 ? (
+                               <span className="font-black text-lg md:text-xl uppercase tracking-widest">CHỌN THÊM {remaining} THẺ</span>
+                             ) : (
+                               <span className="font-black text-xl md:text-2xl uppercase tracking-[0.2em] animate-pulse">XÁC NHẬN</span>
+                             )}
+                           </button>
+                         </div>
+                       );
+                    })()}
+                  </div>
+                ) : (
+                  <button onClick={() => moves.confirmRoll()} className="w-full py-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl shadow-[0_10px_20px_rgba(16,185,129,0.4)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all mt-4">
+                    <span className="font-black text-2xl uppercase tracking-[0.2em]">TIẾP TỤC</span>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="flex flex-col gap-8 h-full justify-center">
@@ -217,10 +290,10 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
                    <div className={`w-full min-h-80 rounded-2xl shadow-[0_0_80px_rgba(0,0,0,0.8)] border-4 flex flex-col p-6 text-center justify-between ${cardColor} relative overflow-hidden`}>
                      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-30"></div>
                      <div className="bg-black/60 rounded-xl p-4 border border-white/20 relative z-10">
-                       <h3 className="font-black text-2xl text-white uppercase tracking-widest drop-shadow-lg leading-tight">{cardToDisplay.name}</h3>
+                       <h3 className="font-black text-2xl text-white uppercase tracking-widest drop-shadow-lg leading-tight">{cardToDisplay?.name || 'Đang tải dữ liệu...'}</h3>
                      </div>
                      <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-2 mt-4 gap-4">
-                       <p className="font-bold text-lg text-slate-100 italic drop-shadow-md">"{cardToDisplay.description}"</p>
+                       <p className="font-bold text-lg text-slate-100 italic drop-shadow-md">"{cardToDisplay?.description || 'Vui lòng chờ trong giây lát...'}"</p>
                        <div className="flex gap-2 flex-wrap justify-center">
                          {getCardBadges(cardToDisplay).map((badge, i) => (
                            <span key={i} className="bg-amber-500 text-amber-950 font-black px-3 py-1 rounded-full text-xs shadow-[0_0_10px_rgba(245,158,11,0.5)]">{badge}</span>

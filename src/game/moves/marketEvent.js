@@ -24,7 +24,8 @@ export const resolveEvent = ({ G, ctx, events, random }) => {
   }
   
   // Random thẻ từ bộ bài hỗn hợp (Event + Boss + Struggle)
-  const randomIndex = Math.floor(random.Number() * currentDeck.length);
+  let randomIndex = Math.floor(random.Number() * currentDeck.length);
+  if (randomIndex >= currentDeck.length) randomIndex = currentDeck.length - 1;
   const drawnCard = currentDeck[randomIndex];
   
   // ======== NẾU LÀ TRÙM CUỐI (BOSS) ========

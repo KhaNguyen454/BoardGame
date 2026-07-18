@@ -16,11 +16,6 @@ export const roll = ({ G, ctx, events, random }, wildcardPreferences = ['capital
   if (p.ring === 2) wildcards += 1;
   else if (p.ring === 3) wildcards += 2;
   
-  for(let i = 0; i < wildcards; i++) {
-     const res = wildcardPreferences[i % wildcardPreferences.length] || 'capital';
-     p.resources[res] = (p.resources[res] || 0) + 1;
-  }
-  
   const resourcesAdded = {
     capital: p.resources.capital - initialResources.capital,
     labor: p.resources.labor - initialResources.labor,
@@ -29,6 +24,21 @@ export const roll = ({ G, ctx, events, random }, wildcardPreferences = ['capital
   };
   
   G.lastRoll = { d1, d2, sum, resourcesAdded };
+  if (wildcards > 0) {
+    G.pendingBonusTokens = wildcards;
+  }
+};
+
+export const claimBonusTokens = ({ G, ctx, events }, chosenTokens) => {
+  const p = G.players[ctx.currentPlayer];
+  p.resources.capital += (chosenTokens.capital || 0);
+  p.resources.labor += (chosenTokens.labor || 0);
+  p.resources.tech += (chosenTokens.tech || 0);
+  p.resources.policy += (chosenTokens.policy || 0);
+  
+  G.pendingBonusTokens = 0;
+  G.lastRoll = null;
+  events.setStage('produce');
 };
 
 export const confirmRoll = ({ G, events }) => {

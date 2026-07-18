@@ -4,7 +4,7 @@ import { produceResources } from './moves/produce';
 import { resolveEvent } from './moves/marketEvent';
 import { contributeTokens } from './moves/bossBattle';
 import { upgradeRing, buySocialPoints, trade, endTurn, executeTrade, skipTrade } from './moves/actions';
-import { confirmRoll } from './moves/rollDice';
+import { confirmRoll, claimBonusTokens } from './moves/rollDice';
 import { confirmEvent } from './moves/marketEvent';
 
 export const DuongDenThiTruong = {
@@ -53,7 +53,7 @@ export const DuongDenThiTruong = {
 
     stages: {
       rollDice: {
-        moves: { roll, confirmRoll }
+        moves: { roll, confirmRoll, claimBonusTokens }
       },
       produce: {
         moves: { produceResources }
