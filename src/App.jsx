@@ -10,6 +10,7 @@ import { MainMenu } from './components/screens/MainMenu';
 import { SetupScreen } from './components/screens/SetupScreen';
 import { toggleAudio, isAudioEnabled, playTurnChange, playSuccess } from './utils/audio';
 import confetti from 'canvas-confetti';
+import { TradeModal } from './components/TradeModal';
 
 const BoardWrapper = (props) => {
   const { G, ctx } = props;
@@ -119,6 +120,7 @@ const BoardWrapper = (props) => {
 
       {/* Modals */}
       <BossModal {...props} />
+      <TradeModal {...props} />
 
       {/* Game Over Modal */}
       {ctx.gameover && (

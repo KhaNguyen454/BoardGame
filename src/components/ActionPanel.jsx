@@ -705,43 +705,42 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
       </div>
 
       {pendingConfirmation && (
-        <div className="absolute top-1/2 right-[100%] mr-6 transform -translate-y-1/2 z-[9999] w-[320px] bg-slate-800 border-4 border-amber-500 rounded-3xl shadow-[0_0_80px_rgba(245,158,11,0.6)] p-6 flex flex-col gap-5 animate-fade-in">
-          {/* The pointer triangle to the right */}
-          <div className="absolute -right-[14px] top-1/2 -translate-y-1/2 w-6 h-6 bg-slate-800 border-r-4 border-t-4 border-amber-500 transform rotate-45 rounded-sm"></div>
-          
-          <h3 className="font-black text-amber-400 uppercase tracking-widest text-center border-b-2 border-slate-700 pb-3 text-lg">
-            Yêu Cầu Xác Nhận
-          </h3>
-          
-          <div className="text-center">
-            <p className="text-white text-sm font-bold leading-relaxed mb-3">
-              <span className="text-amber-400 text-base">P{parseInt(currentPlayerViewId) + 1}</span> đề nghị giao dịch với <span className="text-teal-400 text-base">P{parseInt(pendingConfirmation.payload.partnerId) + 1}</span>
-            </p>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="w-full max-w-sm bg-slate-800 border-4 border-amber-500 rounded-3xl shadow-[0_0_80px_rgba(245,158,11,0.6)] p-6 flex flex-col gap-5 relative">
+            <h3 className="font-black text-amber-400 uppercase tracking-widest text-center border-b-2 border-slate-700 pb-3 text-lg">
+              Yêu Cầu Xác Nhận
+            </h3>
             
-            <div className="text-xs text-slate-200 font-bold bg-slate-900 p-4 rounded-xl border border-slate-600 shadow-inner flex flex-col gap-2">
-               {pendingConfirmation.type === 'trade' && <span>Trao đổi tài nguyên (1 đổi 1)</span>}
-               {pendingConfirmation.type === 'executeTrade' && G.pendingTradeEvent === 'trade_sell_tokens' && <span>Bán Token nhận <span className="text-amber-400 text-base">{pendingConfirmation.payload.price} Tư Bản</span></span>}
-               {pendingConfirmation.type === 'executeTrade' && G.pendingTradeEvent === 'trade_buy_service' && <span>Nhận <span className="text-teal-400 text-base">2 {pendingConfirmation.payload.rewardToken}</span> với giá 2 Tư Bản</span>}
+            <div className="text-center">
+              <p className="text-white text-sm font-bold leading-relaxed mb-3">
+                <span className="text-amber-400 text-base">P{parseInt(currentPlayerViewId) + 1}</span> đề nghị giao dịch với <span className="text-teal-400 text-base">P{parseInt(pendingConfirmation.payload.partnerId) + 1}</span>
+              </p>
+              
+              <div className="text-xs text-slate-200 font-bold bg-slate-900 p-4 rounded-xl border border-slate-600 shadow-inner flex flex-col gap-2">
+                 {pendingConfirmation.type === 'trade' && <span>Trao đổi tài nguyên (1 đổi 1)</span>}
+                 {pendingConfirmation.type === 'executeTrade' && G.pendingTradeEvent === 'trade_sell_tokens' && <span>Bán Token nhận <span className="text-amber-400 text-base">{pendingConfirmation.payload.price} Tư Bản</span></span>}
+                 {pendingConfirmation.type === 'executeTrade' && G.pendingTradeEvent === 'trade_buy_service' && <span>Nhận <span className="text-teal-400 text-base">2 {pendingConfirmation.payload.rewardToken}</span> với giá 2 Tư Bản</span>}
+              </div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-4 animate-pulse">P{parseInt(pendingConfirmation.payload.partnerId) + 1} cần ấn Đồng ý để chốt kèo!</p>
             </div>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-4 animate-pulse">P{parseInt(pendingConfirmation.payload.partnerId) + 1} cần ấn Đồng ý để chốt kèo!</p>
-          </div>
-          
-          <div className="flex gap-3 mt-2">
-            <button onClick={() => setPendingConfirmation(null)} className="flex-1 py-4 bg-slate-700 text-slate-300 font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-600 border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 transition-all">
-              Từ Chối
-            </button>
-            <button onClick={() => {
-               if (pendingConfirmation.type === 'trade') {
-                 moves.trade(pendingConfirmation.payload.partnerId, pendingConfirmation.payload.offer, pendingConfirmation.payload.request);
-                 showAlert('Đã hoàn tất Liên Doanh!');
-               } else if (pendingConfirmation.type === 'executeTrade') {
-                 moves.executeTrade(pendingConfirmation.payload);
-                 showAlert('Đã hoàn tất Hợp Đồng B2B!');
-               }
-               setPendingConfirmation(null);
-            }} className="flex-[2] py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-[0_10px_20px_rgba(245,158,11,0.4)] border-b-4 border-orange-900 active:border-b-0 active:translate-y-1 transition-all">
-              Đồng Ý
-            </button>
+            
+            <div className="flex gap-3 mt-2">
+              <button onClick={() => setPendingConfirmation(null)} className="flex-1 py-4 bg-slate-700 text-slate-300 font-black uppercase tracking-widest text-xs rounded-xl hover:bg-slate-600 border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 transition-all">
+                Từ Chối
+              </button>
+              <button onClick={() => {
+                 if (pendingConfirmation.type === 'trade') {
+                   moves.trade(pendingConfirmation.payload.partnerId, pendingConfirmation.payload.offer, pendingConfirmation.payload.request);
+                   showAlert('Đã hoàn tất Liên Doanh!');
+                 } else if (pendingConfirmation.type === 'executeTrade') {
+                   moves.executeTrade(pendingConfirmation.payload);
+                   showAlert('Đã hoàn tất Hợp Đồng B2B!');
+                 }
+                 setPendingConfirmation(null);
+              }} className="flex-[2] py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black uppercase tracking-widest text-xs rounded-xl shadow-[0_10px_20px_rgba(245,158,11,0.4)] border-b-4 border-orange-900 active:border-b-0 active:translate-y-1 transition-all">
+                Đồng Ý
+              </button>
+            </div>
           </div>
         </div>
       )}
