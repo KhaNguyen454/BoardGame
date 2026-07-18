@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { playClick, playSuccess, playError, playDiceRoll } from '../utils/audio';
 
 // --- Hỗ trợ bóc tách thông số Thẻ bài ---
 const getCardBadges = (card) => {
@@ -55,14 +56,17 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
   const [animatingCardIndex, setAnimatingCardIndex] = useState(-1);
 
   const handleRoll = () => {
+    playDiceRoll();
     setIsRolling(true);
     setTimeout(() => {
       setIsRolling(false);
+      playSuccess();
       moves.roll(['capital', 'labor', 'tech']);
     }, 1000);
   };
 
   const handleDrawCard = () => {
+    playClick();
     setIsAnimatingDraw(true);
     setAnimatingCardIndex(-1);
 
@@ -73,6 +77,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
 
     let tick = 0;
     const interval = setInterval(() => {
+       playClick();
        setAnimatingCardIndex(activeIndices[tick % activeIndices.length]);
        tick++;
     }, 150);
@@ -81,6 +86,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
       clearInterval(interval);
       setIsAnimatingDraw(false);
       setAnimatingCardIndex(-1);
+      playSuccess();
       moves.resolveEvent();
     }, 3000);
   };
@@ -670,14 +676,13 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
   };
 
   return (
-    <div className="w-[25vw] min-w-[320px] max-w-[400px] flex-shrink-0 h-full bg-slate-900/90 backdrop-blur-3xl border-l border-slate-700/50 shadow-[-20px_0_50px_rgba(0,0,0,0.5)] flex flex-col relative z-20">
-      <div className="p-8 bg-gradient-to-b from-black/60 to-transparent border-b border-slate-700/50 text-center">
-        <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]">
+    <div className="w-full h-full flex flex-col relative z-20">
+      <div className="text-center py-1 mb-2 bg-amber-900/50 rounded-lg border border-amber-700/50">
+        <h2 className="text-sm font-black text-amber-200 tracking-widest uppercase drop-shadow-sm">
           {getHeader()}
         </h2>
       </div>
-      
-      <div className="flex-1 p-8 overflow-y-auto relative">
+      <div className="flex-1 overflow-y-auto relative">
         {renderBody()}
 
         {/* Custom Alert Modal */}
