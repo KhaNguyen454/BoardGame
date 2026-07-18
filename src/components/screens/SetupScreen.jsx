@@ -7,7 +7,7 @@ const FACTIONS = [
   'Kinh tế Tập thể / HTX'
 ];
 
-export const SetupScreen = ({ onStartGame }) => {
+export const SetupScreen = ({ onStartGame, onBack }) => {
   const [numPlayers, setNumPlayers] = useState(4);
   const [playersConfig, setPlayersConfig] = useState({
     0: { name: 'Người chơi 1', faction: FACTIONS[0] },
@@ -78,17 +78,26 @@ export const SetupScreen = ({ onStartGame }) => {
           ))}
         </div>
 
-        <button 
-          onClick={() => {
-             // Lọc ra đúng số lượng config
-             const finalConfig = {};
-             for(let i = 0; i < numPlayers; i++) finalConfig[i] = playersConfig[i];
-             onStartGame(finalConfig, numPlayers);
-          }}
-          className="mt-8 px-16 py-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black uppercase tracking-widest text-xl rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.5)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all"
-        >
-          VÀO GAME NÀY
-        </button>
+        <div className="flex flex-col gap-4 mt-8 w-full">
+          <button 
+            onClick={() => {
+               // Lọc ra đúng số lượng config
+               const finalConfig = {};
+               for(let i = 0; i < numPlayers; i++) finalConfig[i] = playersConfig[i];
+               onStartGame(finalConfig, numPlayers);
+            }}
+            className="py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold uppercase tracking-widest text-sm rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] border-b-4 border-teal-900 active:border-b-0 active:translate-y-1 transition-all w-full max-w-xs mx-auto"
+          >
+            VÀO GAME NÀY
+          </button>
+
+          <button 
+            onClick={onBack}
+            className="py-3 bg-transparent border border-slate-600 text-slate-400 hover:text-slate-200 hover:bg-slate-800 font-bold uppercase tracking-widest text-sm rounded-xl transition-colors w-full max-w-xs mx-auto"
+          >
+            QUAY LẠI
+          </button>
+        </div>
       </div>
     </div>
   );

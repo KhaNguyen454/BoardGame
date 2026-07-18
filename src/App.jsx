@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Client } from 'boardgame.io/react';
 import { DuongDenThiTruong } from './game/Game';
 import { GameBoard } from './components/GameBoard';
@@ -12,6 +12,7 @@ import { SetupScreen } from './components/screens/SetupScreen';
 const BoardWrapper = (props) => {
   const { G, ctx } = props;
   const myPlayerId = ctx.currentPlayer; // Auto-focus active player
+  const [showConfirmExit, setShowConfirmExit] = useState(false);
 
   // Lấy câu hướng dẫn theo stage
   const getInstruction = () => {
@@ -32,48 +33,64 @@ const BoardWrapper = (props) => {
       {/* Toast Notifications */}
       <ToastAlert G={props.G} />
 
-      {/* Cột trái: Sidebar (Bảng theo dõi) */}
-      <div className="w-[15vw] min-w-[180px] max-w-[220px] flex-shrink-0 h-full flex flex-col border-r-4 border-amber-700 shadow-2xl bg-neutral-900/90 z-10 overflow-hidden">
-         <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-2">
-            <Sidebar {...props} />
-         </div>
-      </div>
+      {/* Cột trái: Sidebar */}
+      <Sidebar {...props} />
 
-      {/* Cột giữa: Bàn cờ, Hướng dẫn */}
-      <div className="flex-1 min-w-0 relative flex flex-col items-center justify-center px-4">
-         {/* Title area */}
-         <div className="text-center w-full z-10 shrink-0">
-            <h1 className="text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-amber-200 via-yellow-400 to-amber-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-widest uppercase mt-1" style={{ WebkitTextStroke: '1px #78350f' }}>
-              ĐƯỜNG ĐẾN THỊ TRƯỜNG
-            </h1>
-            <div className="bg-red-800/90 inline-block px-6 py-1 mt-1 rounded-sm border-2 border-red-900 shadow-[0_4px_10px_rgba(0,0,0,0.8)] relative">
-                <div className="absolute -left-4 top-1/2 -translate-y-1/2 border-y-[12px] border-y-transparent border-r-[16px] border-r-red-900 drop-shadow-md"></div>
-                <div className="absolute -right-4 top-1/2 -translate-y-1/2 border-y-[12px] border-y-transparent border-l-[16px] border-l-red-900 drop-shadow-md"></div>
-                <span className="text-[10px] lg:text-xs font-black text-amber-200 uppercase tracking-[0.2em] relative z-10 drop-shadow-md">Phiên Bản Định Hướng XHCN</span>
-            </div>
-         </div>
+      {/* Cột giữa: Bàn cờ & Khung Hướng dẫn */}
+      <div className="flex-1 min-w-0 relative flex flex-col items-center justify-center p-4">
+         
+         <button 
+           onClick={() => setShowConfirmExit(true)}
+           className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-slate-800/80 hover:bg-rose-900/80 text-slate-300 hover:text-white px-4 py-2 rounded-full border border-slate-600 hover:border-rose-500 backdrop-blur-md shadow-lg transition-all group"
+         >
+           <span className="text-xl group-hover:-translate-x-1 transition-transform">←</span>
+           <span className="font-bold text-sm uppercase tracking-wider">Quay Lại</span>
+         </button>
 
-         <div className="w-full flex-1 flex flex-col items-center justify-center min-h-0 relative z-0 mt-2 mb-2">
+         <div className="w-full flex-1 flex items-center justify-center min-h-0 mt-8">
            <GameBoard G={props.G} ctx={ctx} />
-           
-           {/* Khung Hướng Dẫn overlays GameBoard */}
-           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[60%] max-w-lg flex-shrink-0 bg-slate-900/95 p-1.5 rounded-lg border border-amber-500 shadow-[0_5px_15px_rgba(0,0,0,0.8)] backdrop-blur-md z-10 text-center">
-             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse"></div>
-             <h3 className="text-amber-400 font-black uppercase tracking-widest text-[8px] mb-0.5">CHỈ THỊ HIỆN TẠI:</h3>
-             <p className="text-white font-bold text-[10px] lg:text-xs animate-fade-in uppercase tracking-wide leading-tight">{getInstruction()}</p>
-           </div>
+         </div>
+         
+         {/* Khung Hướng Dẫn */}
+         <div className="w-[90%] lg:w-[80%] mt-4 flex-shrink-0 bg-slate-800/90 p-4 rounded-xl border border-amber-500/50 shadow-[0_0_20px_rgba(245,158,11,0.2)] backdrop-blur-md relative overflow-hidden z-10">
+           <div className="absolute top-0 left-0 w-1 h-full bg-amber-500 animate-pulse"></div>
+           <h3 className="text-amber-400 font-black uppercase tracking-widest text-xs mb-1">CHỈ THỊ HIỆN TẠI:</h3>
+           <p className="text-white font-bold text-sm lg:text-base animate-fade-in uppercase tracking-wider">{getInstruction()}</p>
          </div>
       </div>
 
-      {/* Cột phải: Action Panel (Quy trình lượt) */}
-      <div className="w-[25vw] min-w-[300px] max-w-[380px] flex-shrink-0 h-full flex flex-col border-l-4 border-amber-700 shadow-2xl bg-neutral-900/90 z-10 overflow-hidden">
-         <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar p-2 relative bg-black/20">
-            <ActionPanel {...props} myPlayerId={myPlayerId} />
-         </div>
-      </div>
+      {/* Cột phải: Action Panel */}
+      <ActionPanel {...props} myPlayerId={myPlayerId} />
 
       {/* Modals */}
       <BossModal {...props} />
+
+      {/* Confirm Exit Modal */}
+      {showConfirmExit && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8 max-w-md w-full shadow-[0_0_50px_rgba(0,0,0,0.8)] relative text-center">
+            <h2 className="text-2xl font-black text-rose-500 uppercase tracking-widest mb-4">THOÁT TRẬN ĐẤU?</h2>
+            <p className="text-slate-300 mb-8 font-bold">Trận đấu hiện tại sẽ không được lưu. Bạn có chắc chắn muốn quay về Menu chính?</p>
+            <div className="flex gap-4 justify-center">
+              <button 
+                onClick={() => setShowConfirmExit(false)}
+                className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold uppercase tracking-wider rounded-xl border border-slate-600 transition-colors flex-1"
+              >
+                Hủy
+              </button>
+              <button 
+                onClick={() => {
+                  setShowConfirmExit(false);
+                  window.dispatchEvent(new Event('RETURN_TO_MENU'));
+                }}
+                className="px-6 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold uppercase tracking-wider rounded-xl shadow-[0_0_20px_rgba(225,29,72,0.4)] transition-colors flex-1"
+              >
+                Đồng Ý
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -85,6 +102,7 @@ const createGameClient = (setupData, numPlayers) => Client({
   },
   board: BoardWrapper,
   numPlayers: numPlayers,
+  debug: false,
 });
 
 export default function App() {
@@ -92,6 +110,14 @@ export default function App() {
   const [setupData, setSetupData] = useState(null);
   const [numPlayers, setNumPlayers] = useState(4);
   
+  useEffect(() => {
+    const handleReturnToMenu = () => {
+      setCurrentScreen('MENU');
+    };
+    window.addEventListener('RETURN_TO_MENU', handleReturnToMenu);
+    return () => window.removeEventListener('RETURN_TO_MENU', handleReturnToMenu);
+  }, []);
+
   if (currentScreen === 'MENU') {
     return <MainMenu onStart={() => setCurrentScreen('SETUP')} />;
   }
@@ -99,6 +125,7 @@ export default function App() {
   if (currentScreen === 'SETUP') {
     return (
       <SetupScreen 
+        onBack={() => setCurrentScreen('MENU')}
         onStartGame={(data, selectedNumPlayers) => {
           setSetupData(data);
           setNumPlayers(selectedNumPlayers);
