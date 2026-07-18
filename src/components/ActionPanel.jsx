@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 
 // --- Hỗ trợ bóc tách thông số Thẻ bài ---
 const getCardBadges = (card) => {
-  if (!card) return [];
+  if (!card || typeof card !== 'object') return [];
   const badges = [];
-  if (card.isBoss) badges.push('💀 BOSS ĐỘC QUYỀN');
-  else if (card?.type?.includes('reward')) badges.push('🌟 CƠ HỘI');
-  else if (card?.type?.includes('penalty')) badges.push('⚠️ RỦI RO');
-  else if (card?.type?.includes('trade')) badges.push('🤝 TƯƠNG TÁC');
+  const cardType = card.type || '';
+  const cardEffect = card.effect || '';
+
+  if (card.isBoss || cardType === 'boss') badges.push('💀 BOSS ĐỘC QUYỀN');
+  else if (cardType.includes('reward')) badges.push('🌟 CƠ HỘI');
+  else if (cardType.includes('penalty')) badges.push('⚠️ RỦI RO');
+  else if (cardType.includes('trade')) badges.push('🤝 TƯƠNG TÁC');
+  else if (cardType.includes('struggle') || cardEffect) badges.push('✊ ĐẤU TRANH');
 
   if (card.amount) {
-    if (card?.type?.includes('capital') || card?.effect?.includes('capital')) badges.push(`📈 C.Points ${card.amount}`);
-    if (card?.type?.includes('social') || card?.effect?.includes('social')) badges.push(`🌱 S.Points ${card.amount}`);
-    if (card?.type?.includes('tech')) badges.push(`💻 Tech ${card.amount}`);
-    if (card?.effect === 'minus_labor') badges.push(`👷 Labor -${card.amount}`);
+    if (cardType.includes('capital') || cardEffect.includes('capital')) badges.push(`📈 C.Points ${card.amount}`);
+    if (cardType.includes('social') || cardEffect.includes('social')) badges.push(`🌱 S.Points ${card.amount}`);
+    if (cardType.includes('tech') || cardEffect.includes('tech')) badges.push(`💻 Tech ${card.amount}`);
+    if (cardEffect.includes('minus_labor') || cardEffect.includes('labor')) badges.push(`👷 Labor -${card.amount}`);
   }
   if (card.capitalAmount) badges.push(`📈 C.Points ${card.capitalAmount}`);
   if (card.laborAmount) badges.push(`👷 Labor ${card.laborAmount}`);
-  if (card?.effect === 'lose_turn' || card?.type?.includes('ban')) badges.push('⛔ Bỏ Lượt / Cấm');
+  if (cardEffect.includes('lose_turn') || cardType.includes('ban') || cardEffect.includes('ban')) badges.push('⛔ Bỏ Lượt / Cấm');
+  
   return badges;
 };
 
@@ -272,13 +277,30 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
         const isRing3 = Object.values(G.players).some(pl => pl.ring === 3);
         const cardToDisplay = G.lastEvent;
 
-        if (cardToDisplay && !isAnimatingDraw) {
+        if (cardToDisplay && typeof cardToDisplay === 'object' && !isAnimatingDraw) {
+           if (!cardToDisplay.name) {
+             return (
+               <div className="flex flex-col gap-10 h-full justify-center px-4">
+                 <div className="flex flex-col items-center gap-8 animate-bounce-in">
+                   <div className="w-full min-h-80 rounded-2xl shadow-xl border-4 flex flex-col p-6 text-center justify-center bg-slate-900 border-red-500 text-white">
+                     <h3 className="font-black text-xl text-red-400 uppercase mb-4">Lỗi Dữ Liệu Thẻ Bài</h3>
+                     <p>Đang tải hoặc thẻ bài bị lỗi dữ liệu (thiếu name/title).</p>
+                   </div>
+                   <button onClick={() => moves.confirmEvent()} className="w-full py-8 bg-slate-700 hover:bg-slate-600 text-white rounded-[2rem] border-b-8 border-slate-900 active:border-b-0 active:translate-y-2 transition-all">
+                     <span className="font-black text-xl uppercase tracking-widest">Bỏ qua lỗi</span>
+                   </button>
+                 </div>
+               </div>
+             );
+           }
+
            let cardColor = 'bg-gradient-to-br from-slate-700 to-slate-900 border-slate-500';
-           if (cardToDisplay.isBoss) {
+           const cardId = cardToDisplay.id || '';
+           if (cardToDisplay.isBoss || (cardToDisplay.type && cardToDisplay.type === 'boss')) {
              cardColor = 'bg-gradient-to-br from-purple-700 to-indigo-900 border-purple-400';
-           } else if (['ev6', 'ev7', 'ev8', 'ev9', 'cs1', 'cs2', 'cs3', 'cs4', 'cs5', 'cs6', 'cs7'].includes(cardToDisplay.id) || cardToDisplay.effect) {
+           } else if (['ev6', 'ev7', 'ev8', 'ev9', 'cs1', 'cs2', 'cs3', 'cs4', 'cs5', 'cs6', 'cs7'].includes(cardId) || cardToDisplay.effect) {
              cardColor = 'bg-gradient-to-br from-rose-700 to-red-950 border-rose-500';
-           } else if (['ev10', 'ev11'].includes(cardToDisplay.id)) {
+           } else if (['ev10', 'ev11'].includes(cardId)) {
              cardColor = 'bg-gradient-to-br from-orange-600 to-amber-900 border-orange-500';
            } else {
              cardColor = 'bg-gradient-to-br from-emerald-600 to-teal-900 border-emerald-400';
