@@ -22,7 +22,7 @@ export const Sidebar = ({ G, ctx }) => {
          const colorClass = FACTION_COLORS[player.faction] || 'from-gray-800 to-gray-700 border-gray-500';
          
          return (
-           <div key={id} className={`p-2 flex-1 min-h-0 flex flex-col justify-between rounded-xl border-2 bg-gradient-to-br ${colorClass} transition-all duration-300 ${isCurrentTurn ? 'scale-[1.02] shadow-[0_0_20px_rgba(251,191,36,0.6)] border-amber-400 ring-2 ring-amber-300/50 animate-pulse' : 'opacity-80 hover:opacity-100'} overflow-hidden`}>
+           <div key={id} className={`p-2 shrink-0 min-w-[240px] lg:min-w-0 flex flex-col justify-between rounded-xl border-2 bg-gradient-to-br ${colorClass} transition-all duration-300 ${isCurrentTurn ? 'scale-[1.02] shadow-[0_0_20px_rgba(251,191,36,0.6)] border-amber-400 ring-2 ring-amber-300/50 animate-pulse' : 'opacity-80 hover:opacity-100'} overflow-hidden`}>
              <div className="flex flex-col mb-1 gap-1">
                <div className="flex justify-between items-start">
                  <h3 className="font-black text-white text-sm md:text-base drop-shadow-md tracking-wide leading-none truncate">{player.name || `Người chơi ${parseInt(id)+1}`}</h3>

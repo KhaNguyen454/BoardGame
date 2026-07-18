@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { playClick, playSuccess, playError, playDiceRoll } from '../utils/audio';
 
 // --- Hỗ trợ bóc tách thông số Thẻ bài ---
 const getCardBadges = (card) => {
@@ -55,14 +56,17 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
   const [animatingCardIndex, setAnimatingCardIndex] = useState(-1);
 
   const handleRoll = () => {
+    playDiceRoll();
     setIsRolling(true);
     setTimeout(() => {
       setIsRolling(false);
+      playSuccess();
       moves.roll(['capital', 'labor', 'tech']);
     }, 1000);
   };
 
   const handleDrawCard = () => {
+    playClick();
     setIsAnimatingDraw(true);
     setAnimatingCardIndex(-1);
 
@@ -73,6 +77,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
 
     let tick = 0;
     const interval = setInterval(() => {
+       playClick();
        setAnimatingCardIndex(activeIndices[tick % activeIndices.length]);
        tick++;
     }, 150);
@@ -81,6 +86,7 @@ export const ActionPanel = ({ G, ctx, moves, playerID, myPlayerId, isActive }) =
       clearInterval(interval);
       setIsAnimatingDraw(false);
       setAnimatingCardIndex(-1);
+      playSuccess();
       moves.resolveEvent();
     }, 3000);
   };
