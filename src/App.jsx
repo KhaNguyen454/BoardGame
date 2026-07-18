@@ -102,6 +102,7 @@ const createGameClient = (setupData, numPlayers) => Client({
   },
   board: BoardWrapper,
   numPlayers: numPlayers,
+  debug: false,
 });
 
 export default function App() {
